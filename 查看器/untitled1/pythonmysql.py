@@ -4,10 +4,10 @@ class sqll:
     def sqlse(self):
         # 打开数据库连接
 
-        db = pymysql.connect(host='itgou.top',
+        db = pymysql.connect(host='xxx.xxx.xxx.xxx',
                                      port=3306,
-                                     user='root',
-                                     password='685029029',
+                                     user='xxxxx',
+                                     password='xxxxxxxxx',
                                      db='phone',
                                      charset='utf8',
                                      cursorclass=pymysql.cursors.DictCursor)
