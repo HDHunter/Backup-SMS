@@ -2,6 +2,7 @@ package com.steam.android.androidsteam;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -38,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tv = findViewById(R.id.textview);
+    }
+
+    public void uploadqu(View view) {
+        tv.setText("");
     }
 
     public void sms(View view) {
@@ -100,12 +105,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sp(View view) {
-        Toast.makeText(MainActivity.this, "功能开发中", Toast.LENGTH_SHORT).show();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 789);
             return;
         }
-        Log.d("", "照片选择备份");
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+//        intent.putExtra("crop", "true");
+        // intent.putExtra("aspectX", 1);
+        // intent.putExtra("aspectY", 2);
+        // intent.putExtra("output", Uri.fromFile(tempFile));
+        // intent.putExtra("outputFormat", "JPEG");
+        startActivityForResult(Intent.createChooser(intent, "选图"), 2020);
+        //单个图片选择
     }
 
 
@@ -427,5 +439,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
         c.close();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == 2020) {
+                tv.setText(data.toString());
+                Log.d("", data.toString());
+            }
+        }
     }
 }

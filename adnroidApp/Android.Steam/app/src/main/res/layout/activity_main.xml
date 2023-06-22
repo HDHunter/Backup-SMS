@@ -37,10 +37,11 @@
             android:text="同步通话记录" />
 
         <Button
-            android:layout_width="wrap_content"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:onClick="sp"
-            android:text="遍历图片名" />
+            android:text="上传一个图片" />
 
         <TextView
             android:id="@+id/textview"
@@ -53,10 +54,15 @@
             android:text=""
             android:textAlignment="center" />
 
+        <ImageView
+            android:id="@+id/imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <Button
-            android:id="@+id/btn"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:onClick="uploadqu"
             android:text="点击按钮上传图片" />
 
     </LinearLayout>
