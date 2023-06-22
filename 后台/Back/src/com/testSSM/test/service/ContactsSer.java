@@ -14,10 +14,11 @@ import com.testSSM.test.model.Sms;
 
 @Service
 public class ContactsSer {
-	@Resource
-	private ContactsMaper contactscaper;
-	public int phone(Contacts con) {
-		System.out.println(con.toString());
-		return contactscaper.phone(con);
-	}
+    @Resource
+    private ContactsMaper contactscaper;
+
+    public int phone(Contacts con) {
+        System.out.println(con.toString());
+        return contactscaper.phone(con);
+    }
 }

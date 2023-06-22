@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.testSSM.test.model.Contacts;
 
 
-
-public interface ContactsMaper{
-	public int phone(Contacts con);
+public interface ContactsMaper {
+    public int phone(Contacts con);
 }

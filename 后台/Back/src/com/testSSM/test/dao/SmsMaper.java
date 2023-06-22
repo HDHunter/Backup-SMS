@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.testSSM.test.model.Sms;
 
 
-public interface SmsMaper{
-	public int Sms(Sms sms);
+public interface SmsMaper {
+    public int Sms(Sms sms);
 }

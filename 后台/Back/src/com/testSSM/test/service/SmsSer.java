@@ -12,10 +12,11 @@ import com.testSSM.test.model.Sms;
 
 @Service
 public class SmsSer {
-	@Resource
-	private SmsMaper smsmaper;
-	public int sms(Sms sms) {
-		System.out.println(sms.toString());
-		return smsmaper.Sms(sms);
-	}
+    @Resource
+    private SmsMaper smsmaper;
+
+    public int sms(Sms sms) {
+        System.out.println(sms.toString());
+        return smsmaper.Sms(sms);
+    }
 }
