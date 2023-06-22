@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ReadFile {
     public static void test(String fileDir) {
-        List<File> fileList = new ArrayList<File>();
+        List<File> fileList = new ArrayList<>();
         File file = new File(fileDir);
         File[] files = file.listFiles();// 获取目录下的所有文件或文件夹
         System.out.println("进入线程");

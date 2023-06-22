@@ -61,9 +61,7 @@ public class SetPost2 {
 //              System.out.println(rev+"333333333");
                 //System.out.println("wawawawa");
             }
-        } catch (ClientProtocolException e) {
-        } catch (IOException e) {
-        } catch (Exception e) {
+        } catch(Exception e) {
         }
     }
 

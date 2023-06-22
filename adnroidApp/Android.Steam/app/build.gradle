@@ -4,8 +4,8 @@ android {
     compileSdkVersion 31
     buildToolsVersion "31.0.0"
     defaultConfig {
-        applicationId "com.steam.android.androidsteam"
-        minSdkVersion 23
+        applicationId "com.hunter.baby"
+        minSdkVersion 19
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -16,14 +16,22 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     packagingOptions {
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/*'
+        exclude 'schema/*'
     }
 }
 
@@ -32,4 +40,8 @@ dependencies {
 
     api 'com.android.support:appcompat-v7:28.0.0'
     api 'com.android.support.constraint:constraint-layout:2.0.4'
+
+    implementation 'com.alibaba:fastjson:2.0.34'
+    implementation 'org.apache.httpcomponents:httpcore:4.4.11'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.6'
 }

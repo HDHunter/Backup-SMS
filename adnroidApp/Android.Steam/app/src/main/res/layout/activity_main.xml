@@ -1,35 +1,64 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/activity_main"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-tools:context="com.steam.android.androidsteam.MainActivity">
-
-<Button
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:onClick="sms"
-    android:text="查看短信" />
+    android:layout_height="match_parent">
 
-<Button
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:onClick="phoneNumber"
-    android:text="查看联系人" />
-    <Button
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/girlbg" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="sp"
-        android:text="遍历图片名" />
-    <EditText android:id="@+id/edit_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="这里写入你调用的接口的地址"/>
-    <Button android:id="@+id/btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="点击按钮上传图片"/>
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:onClick="sms"
+            android:text="同步短信" />
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:onClick="contacts"
+            android:text="同步联系人" />
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:onClick="phoneNumber"
+            android:text="同步通话记录" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="sp"
+            android:text="遍历图片名" />
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp"
+            android:singleLine="true"
+            android:text=""
+            android:textAlignment="center" />
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="点击按钮上传图片" />
+
+    </LinearLayout>
+
+</FrameLayout>
