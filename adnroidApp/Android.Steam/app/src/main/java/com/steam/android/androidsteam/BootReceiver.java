@@ -10,12 +10,13 @@ import android.util.Log;
  */
 
 public class BootReceiver extends BroadcastReceiver {
-    static final String action_boot ="android.intent.action.BOOT_COMPLETED";
+    static final String action_boot = "android.intent.action.BOOT_COMPLETED";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i("charge start", "启动完成");
 
-        if (intent.getAction().equals(action_boot)){
+        if (intent.getAction().equals(action_boot)) {
 
             Intent mBootIntent = new Intent(context, MainActivity.class);
             // 下面这句话必须加上才能开机自动运行app的界面

