@@ -1,33 +1,22 @@
 package com.testSSM.test.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.alibaba.fastjson.JSONArray;
+import com.testSSM.test.model.Sms;
+import com.testSSM.test.service.SmsSer;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.testSSM.test.model.Sms;
-import com.testSSM.test.service.SmsSer;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @Controller
@@ -100,7 +89,7 @@ public class SmsCon {
             } else {
                 smS.setSms_huihua(Integer.parseInt(map2.get("对话的序号")));
             }
-            if (smss.sms(smS) != 1) {
+            if (smss.Sms(smS) != 1) {
                 System.out.println("存储报错");
                 return 0;
             }

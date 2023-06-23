@@ -4,5 +4,5 @@ import com.testSSM.test.model.Sms;
 
 
 public interface SmsMaper {
-    public int Sms(Sms sms);
+    int Sms(Sms sms);
 }

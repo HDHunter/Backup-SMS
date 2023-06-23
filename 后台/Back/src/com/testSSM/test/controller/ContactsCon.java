@@ -1,46 +1,37 @@
 package com.testSSM.test.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.alibaba.fastjson.JSONArray;
+import com.testSSM.test.model.Contacts;
+import com.testSSM.test.service.ContactsSer;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.testSSM.test.model.Contacts;
-import com.testSSM.test.service.ContactsSer;
-import com.testSSM.test.service.SmsSer;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
 @RequestMapping("/phone")
 public class ContactsCon {
     @Resource
-    private ContactsSer contactsser;
+    @Autowired
+    private ContactsSer contactsSer;
 
     @RequestMapping(value = "phone", produces = "application/json;charset=utf-8")
     @ResponseBody
     public int sms(HttpServletRequest request, Model model) {
-        List<Map<String, String>> list2 = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> list2 = new ArrayList<>();
         try {
             request.setCharacterEncoding("utf-8");
             try {
@@ -48,7 +39,7 @@ public class ContactsCon {
                 InputStream requestInputStream = request.getInputStream();
 
                 //接收流缓冲
-                StringBuffer stringBuffer = new StringBuffer();
+                StringBuilder stringBuffer = new StringBuilder();
 
                 //读取流
                 BufferedReader reader = new BufferedReader(new InputStreamReader(requestInputStream, "utf-8"));
@@ -72,18 +63,13 @@ public class ContactsCon {
                 reader.close();
 
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         Contacts contacts = new Contacts();
-        for (int i = 0; i < list2.size(); i++) {
-            Map<String, String> map2 = new HashMap<String, String>();
-            map2 = list2.get(i);
-
-
+        for (Map<String, String> map2 : list2) {
             if (map2.get("number") == null || map2.get("number").equals("") || map2.get("number").equals("null")) {
                 contacts.setPhonenum("0");
             } else {
@@ -94,21 +80,15 @@ public class ContactsCon {
             } else {
                 contacts.setPhonename(map2.get("name"));
             }
-            int aa = contactsser.phone(contacts);
-            if (aa != 1 || contactsser.phone(contacts) != -1) {
+            int aa = contactsSer.phone(contacts);
+            if (aa != 1 || contactsSer.phone(contacts) != -1) {
                 if (aa != -1) {
-                    System.out.println("存储报错" + contactsser.phone(contacts));
+                    System.out.println("存储报错" + contactsSer.phone(contacts));
                     return 0;
                 }
             }
         }
         return 1;
-//		
-//		
-//		
-//		smS.setSmsdate(smsdate);
-
-        //return smss.sms(smS);
     }
 
     public static String filterEmoji(String source) {
