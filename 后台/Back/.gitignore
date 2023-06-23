@@ -1,16 +1,4 @@
-/apk_local_debug
 /bin
 /out
-/.idea
-/logs
-/temp
-/temp_*
-/tempas
-/test
-/log
-/db
-/sdk
-/gameapk
-Resigner.jar
-.idea
+/target
 .DS_Store
