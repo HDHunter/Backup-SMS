@@ -3,6 +3,7 @@ package com.testSSM.test.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.testSSM.test.model.Contacts;
 import com.testSSM.test.service.ContactsSer;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStream;
