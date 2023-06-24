@@ -22,15 +22,14 @@ import java.util.Map;
 
 
 @Controller
-@RequestMapping("/img")
 public class ImgCon {
     @Resource
     @Autowired
     private ContactsSer contactsSer;
 
-    @RequestMapping(value = "img", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = {"/Back/img", "/img"})
     @ResponseBody
-    public int sms(HttpServletRequest request, Model model) {
+    public String img(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();
         try {
             request.setCharacterEncoding("utf-8");
@@ -84,11 +83,11 @@ public class ImgCon {
             if (aa != 1 || contactsSer.phone(contacts) != -1) {
                 if (aa != -1) {
                     System.out.println("存储报错" + contactsSer.phone(contacts));
-                    return 0;
+                    return "<h1>Fail</h1>";
                 }
             }
         }
-        return 1;
+        return "<h1>OK</h1>";
     }
 
     public static String filterEmoji(String source) {

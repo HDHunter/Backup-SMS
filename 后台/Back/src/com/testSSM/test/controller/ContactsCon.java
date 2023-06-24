@@ -22,28 +22,24 @@ import java.util.Map;
 
 
 @Controller
-@RequestMapping("/phone")
 public class ContactsCon {
     @Resource
     @Autowired
     private ContactsSer contactsSer;
 
-    @RequestMapping(value = "phone", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = {"/Back/phone", "/phone"})
     @ResponseBody
-    public int phone(HttpServletRequest request, Model model) {
+    public String phone(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();
         try {
             request.setCharacterEncoding("utf-8");
             try {
                 //获取流
                 InputStream requestInputStream = request.getInputStream();
-
                 //接收流缓冲
                 StringBuilder stringBuffer = new StringBuilder();
-
                 //读取流
                 BufferedReader reader = new BufferedReader(new InputStreamReader(requestInputStream, "utf-8"));
-
                 //读入流，转换成字符串
                 String readRequestInputStream;
                 while ((readRequestInputStream = reader.readLine()) != null) {
@@ -57,11 +53,8 @@ public class ContactsCon {
                     Map<String, String> item = (Map<String, String>) obj;
                     list2.add(item);
                 }
-
-
                 //关闭资源
                 reader.close();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -84,11 +77,11 @@ public class ContactsCon {
             if (aa != 1 || contactsSer.phone(contacts) != -1) {
                 if (aa != -1) {
                     System.out.println("存储报错" + contactsSer.phone(contacts));
-                    return 0;
+                    return "<h1>Fail</h1>";
                 }
             }
         }
-        return 1;
+        return "<h1>OK</h1>";
     }
 
     public static String filterEmoji(String source) {

@@ -24,28 +24,24 @@ import java.util.Map;
 
 
 @Controller
-@RequestMapping("/sms")
 public class SmsCon {
     @Resource
     @Autowired
     private SmsSer smss;
 
-    @RequestMapping(value = "sms", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = {"/Back/sms", "/sms"}, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public int sms(HttpServletRequest request, Model model) {
+    public String sms(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();
         try {
             request.setCharacterEncoding("utf-8");
             try {
                 //获取流
                 InputStream requestInputStream = request.getInputStream();
-
                 //接收流缓冲
                 StringBuilder stringBuffer = new StringBuilder();
-
                 //读取流
                 BufferedReader reader = new BufferedReader(new InputStreamReader(requestInputStream, "utf-8"));
-
                 //读入流，转换成字符串
                 String readRequestInputStream;
                 while ((readRequestInputStream = reader.readLine()) != null) {
@@ -79,7 +75,6 @@ public class SmsCon {
             } else {
                 smS.setSms_id(Integer.parseInt(map2.get("id")));
             }
-
             String res;
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             long lt = Long.parseLong(map2.get("时间"));
@@ -94,10 +89,10 @@ public class SmsCon {
             }
             if (smss.Sms(smS) != 1) {
                 System.out.println("存储报错");
-                return 0;
+                return "<h1>Fail</h1>";
             }
         }
-        return 1;
+        return "<h1>OK</h1>";
     }
 
     //去掉短信中的Emoji

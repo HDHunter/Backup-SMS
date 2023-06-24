@@ -7,6 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <name>first Maven Webapp</name>
     <url>http://maven.apache.org</url>
+    <!--6.0版本的SpringMVC只支持JDK17以上版本-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -136,16 +137,16 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.15.1</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.codehaus.jackson</groupId>-->
-<!--            <artifactId>jackson-core-lgpl</artifactId>-->
-<!--            <version>1.9.13</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.codehaus.jackson</groupId>-->
-<!--            <artifactId>jackson-mapper-lgpl</artifactId>-->
-<!--            <version>1.9.13</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.codehaus.jackson</groupId>-->
+        <!--            <artifactId>jackson-core-lgpl</artifactId>-->
+        <!--            <version>1.9.13</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.codehaus.jackson</groupId>-->
+        <!--            <artifactId>jackson-mapper-lgpl</artifactId>-->
+        <!--            <version>1.9.13</version>-->
+        <!--        </dependency>-->
         <!-- 第三部分：数据库和mybatis -->
         <!-- MyBatis -->
         <dependency>
@@ -157,7 +158,7 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
-<!--            <version>3.0.2</version>-->
+            <!--            <version>3.0.2</version>-->
             <version>2.1.1</version>
         </dependency>
         <!-- 数据库 -->
