@@ -30,7 +30,7 @@ public class ContactsCon {
 
     @RequestMapping(value = "phone", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public int sms(HttpServletRequest request, Model model) {
+    public int phone(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();
         try {
             request.setCharacterEncoding("utf-8");

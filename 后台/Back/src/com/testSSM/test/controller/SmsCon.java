@@ -17,7 +17,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -30,7 +33,7 @@ public class SmsCon {
     @RequestMapping(value = "sms", produces = "application/json;charset=utf-8")
     @ResponseBody
     public int sms(HttpServletRequest request, Model model) {
-        List<Map<String, String>> list2 = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> list2 = new ArrayList<>();
         try {
             request.setCharacterEncoding("utf-8");
             try {
@@ -38,7 +41,7 @@ public class SmsCon {
                 InputStream requestInputStream = request.getInputStream();
 
                 //接收流缓冲
-                StringBuffer stringBuffer = new StringBuffer();
+                StringBuilder stringBuffer = new StringBuilder();
 
                 //读取流
                 BufferedReader reader = new BufferedReader(new InputStreamReader(requestInputStream, "utf-8"));
@@ -62,15 +65,13 @@ public class SmsCon {
                 //关闭资源
                 reader.close();
             } catch (Exception e) {
+                e.printStackTrace();
             }
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         Sms smS = new Sms();
-        for (int i = 0; i < list2.size(); i++) {
-            Map<String, String> map2 = new HashMap<String, String>();
-            map2 = list2.get(i);
+        for (Map<String, String> map2 : list2) {
             smS.setPhonenum(map2.get("手机号"));
             smS.setSms(map2.get("内容"));
             if (map2.get("id") == null || map2.get("id").equals("")) {
@@ -81,7 +82,7 @@ public class SmsCon {
 
             String res;
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            long lt = new Long(Long.parseLong(map2.get("时间")));
+            long lt = Long.parseLong(map2.get("时间"));
             Date date = new Date(lt);
             res = simpleDateFormat.format(date);
             smS.setSmsdate(res);
