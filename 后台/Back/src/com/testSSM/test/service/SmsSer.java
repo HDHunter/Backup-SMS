@@ -18,5 +18,4 @@ public class SmsSer implements SmsMaper {
         System.out.println(sms.toString());
         return smsMaper.Sms(sms);
     }
-
 }

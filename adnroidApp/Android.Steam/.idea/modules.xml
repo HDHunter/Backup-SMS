@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Android.Steam.iml" filepath="$PROJECT_DIR$/Android.Steam.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Android.Steam.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Android.Steam.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Android.Steam.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Android.Steam.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Android.Steam.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Android.Steam.app.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Android.Steam.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Android.Steam.app.unitTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/adnroidApp.Android.Steam.iml" filepath="$PROJECT_DIR$/.idea/modules/adnroidApp.Android.Steam.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>
