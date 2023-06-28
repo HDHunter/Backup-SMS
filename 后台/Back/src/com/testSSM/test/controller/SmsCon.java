@@ -27,7 +27,7 @@ import java.util.Map;
 public class SmsCon {
     @Resource
     @Autowired
-    private SmsSer smss;
+    private SmsSer smsSer;
 
     @RequestMapping(value = {"/Back/sms", "/sms"}, produces = "application/json;charset=utf-8")
     @ResponseBody
@@ -68,26 +68,26 @@ public class SmsCon {
         }
         Sms smS = new Sms();
         for (Map<String, String> map2 : list2) {
-            smS.setPhonenum(map2.get("手机号"));
-            smS.setSms(map2.get("内容"));
+            smS.setAddress(map2.get("手机号"));
+            smS.setBody(map2.get("内容"));
             if (map2.get("id") == null || map2.get("id").equals("")) {
-                smS.setSms_id(0);
+                smS.setId(0);
             } else {
-                smS.setSms_id(Integer.parseInt(map2.get("id")));
+                smS.setId(Integer.parseInt(map2.get("id")));
             }
             String res;
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             long lt = Long.parseLong(map2.get("时间"));
             Date date = new Date(lt);
             res = simpleDateFormat.format(date);
-            smS.setSmsdate(res);
+            smS.setDate(res);
 
             if (map2.get("对话的序号") == null || map2.get("对话的序号").equals("")) {
-                smS.setSms_huihua(0);
+                smS.setThread_id("0");
             } else {
-                smS.setSms_huihua(Integer.parseInt(map2.get("对话的序号")));
+                smS.setThread_id(map2.get("对话的序号"));
             }
-            if (smss.Sms(smS) != 1) {
+            if (smsSer.add(smS) != 1) {
                 System.out.println("存储报错");
                 return "<h1>Fail</h1>";
             }

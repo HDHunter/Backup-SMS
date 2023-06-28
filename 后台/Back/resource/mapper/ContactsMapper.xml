@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.testSSM.test.dao.ContactsMaper">
+<mapper namespace="com.testSSM.test.dao.ContactsMapper">
 
-    <insert id="phone" parameterType="com.testSSM.test.model.Contacts">
-        call Upphone(#{phonename},#{phonenum});
+    <insert id="contact" parameterType="com.testSSM.test.model.Contacts">
+        INSERT INTO
+        contact(#{contactId},#{displayName},#{photoUri},#{numberType},#{label},#{number},#{number1},#{number2},#{firstName},#{lastName},#{company},#{department},#{job},#{jobDescription},#{emailAddress},#{emailAddressDisplayName},#{note},#{webUrl},#{nickName},#{relationName},#{protocol},#{customProtocol},#{identity},#{namespace},#{groupId});
     </insert>
 
 </mapper>

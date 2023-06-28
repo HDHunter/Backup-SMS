@@ -67,26 +67,6 @@ public class ImgCon {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        Contacts contacts = new Contacts();
-        for (Map<String, String> map2 : list2) {
-            if (map2.get("number") == null || map2.get("number").equals("") || map2.get("number").equals("null")) {
-                contacts.setPhonenum("0");
-            } else {
-                contacts.setPhonenum(map2.get("number"));
-            }
-            if (map2.get("name") == null || map2.get("name").equals("null") || map2.get("name").equals("")) {
-                contacts.setPhonename("");
-            } else {
-                contacts.setPhonename(map2.get("name"));
-            }
-            int aa = contactsSer.phone(contacts);
-            if (aa != 1 || contactsSer.phone(contacts) != -1) {
-                if (aa != -1) {
-                    System.out.println("存储报错" + contactsSer.phone(contacts));
-                    return "<h1>Fail</h1>";
-                }
-            }
-        }
         return "<h1>OK</h1>";
     }
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.testSSM.test.dao.SmsMapper">
+
+
+    <resultMap type="com.testSSM.test.model.Call" id="call">
+        <id column="id" property="id"/>
+        <result column="number" property="number"/>
+        <result column="date" property="date"/>
+        <result column="duration" property="duration"/>
+    </resultMap>
+
+    <insert id="call" parameterType="com.testSSM.test.model.Call">
+        INSERT INTO calls(#{id},#{number},#{date},#{duration});
+    </insert>
+
+</mapper>

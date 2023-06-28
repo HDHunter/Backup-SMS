@@ -1,8 +1,8 @@
 package com.testSSM.test.controller;
 
 import com.alibaba.fastjson.JSONArray;
-import com.testSSM.test.model.Contacts;
-import com.testSSM.test.service.ContactsSer;
+import com.testSSM.test.model.Call;
+import com.testSSM.test.service.CallsSer;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +16,22 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 
 @Controller
-public class ContactsCon {
+public class CallsCon {
     @Resource
     @Autowired
-    private ContactsSer contactsSer;
+    private CallsSer callsSer;
 
-    @RequestMapping(value = {"/Back/contact", "/contact"})
+    @RequestMapping(value = {"/Back/calls", "/calls"}, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String contact(HttpServletRequest request, Model model) {
+    public String call(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();
         try {
             request.setCharacterEncoding("utf-8");
@@ -46,10 +48,13 @@ public class ContactsCon {
                     stringBuffer.append(readRequestInputStream).append("\n");
                 }
                 String str = stringBuffer.toString();
+                //去掉emoji
                 str = filterEmoji(str);
+                //转为list集合
                 List<Object> list = JSONArray.parseArray(str, Object.class);
 
                 for (Object obj : list) {
+                    //将list集合中的object转为map，然后放到list2中形成	  List<Map<String,String>>
                     Map<String, String> item = (Map<String, String>) obj;
                     list2.add(item);
                 }
@@ -61,29 +66,36 @@ public class ContactsCon {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        Contacts contacts = new Contacts();
+        Call call = new Call();
         for (Map<String, String> map2 : list2) {
-            if (map2.get("number") == null || map2.get("number").equals("") || map2.get("number").equals("null")) {
-                contacts.setNumber("0");
+            call.setNumber(map2.get("手机号"));
+            call.setDate(map2.get("内容"));
+            if (map2.get("id") == null || map2.get("id").equals("")) {
+                call.setId(0);
             } else {
-                contacts.setNumber1(map2.get("number"));
+                call.setId(Integer.parseInt(map2.get("id")));
             }
-            if (map2.get("name") == null || map2.get("name").equals("null") || map2.get("name").equals("")) {
-                contacts.setDisplayName("");
+            String res;
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            long lt = Long.parseLong(map2.get("时间"));
+            Date date = new Date(lt);
+            res = simpleDateFormat.format(date);
+            call.setDate(res);
+
+            if (map2.get("对话的序号") == null || map2.get("对话的序号").equals("")) {
+                call.setId(0);
             } else {
-                contacts.setDisplayName(map2.get("name"));
+                call.setId(34);
             }
-            int aa = contactsSer.add(contacts);
-            if (aa != 1 || contactsSer.add(contacts) != -1) {
-                if (aa != -1) {
-                    System.out.println("存储报错" + contactsSer.add(contacts));
-                    return "<h1>Fail</h1>";
-                }
+            if (callsSer.add(call) != 1) {
+                System.out.println("存储报错");
+                return "<h1>Fail</h1>";
             }
         }
         return "<h1>OK</h1>";
     }
 
+    //去掉短信中的Emoji
     public static String filterEmoji(String source) {
         String slipStr = "";
         if (StringUtils.isNotBlank(source)) {
@@ -92,6 +104,4 @@ public class ContactsCon {
             return source;
         }
     }
-
-
 }

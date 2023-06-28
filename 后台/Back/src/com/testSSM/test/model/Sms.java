@@ -1,70 +1,83 @@
 package com.testSSM.test.model;
 
 public class Sms {
-    private int smsid;
-    private String phonenum;
-    private String sms;
-    private String smsdate;
-    private int sms_id;
-    private int sms_huihua;
 
-    public int getSms_huihua() {
-        return sms_huihua;
+    private String address;
+    private String date;
+    private String body;
+    private String status;
+    private String error_code;
+    private int id;
+    private String thread_id;
+
+
+    public String getAddress() {
+        return address;
     }
 
-    public void setSms_huihua(int sms_huihua) {
-        this.sms_huihua = sms_huihua;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public int getSms_id() {
-        return sms_id;
+    public String getDate() {
+        return date;
     }
 
-    public void setSms_id(int sms_id) {
-        this.sms_id = sms_id;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public int getSmsid() {
-        return smsid;
+    public String getBody() {
+        return body;
     }
 
-    public void setSmsid(int smsid) {
-        this.smsid = smsid;
+    public void setBody(String body) {
+        this.body = body;
     }
 
-    public String getPhonenum() {
-        return phonenum;
+    public String getStatus() {
+        return status;
     }
 
-    public void setPhonenum(String phonenum) {
-        this.phonenum = phonenum;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getSms() {
-        return sms;
+    public String getError_code() {
+        return error_code;
     }
 
-    public void setSms(String sms) {
-        this.sms = sms;
+    public void setError_code(String error_code) {
+        this.error_code = error_code;
     }
 
-    public String getSmsdate() {
-        return smsdate;
+    public int getId() {
+        return id;
     }
 
-    public void setSmsdate(String smsdate) {
-        this.smsdate = smsdate;
+    public void setId(int id) {
+        this.id = id;
     }
+
+    public String getThread_id() {
+        return thread_id;
+    }
+
+    public void setThread_id(String thread_id) {
+        this.thread_id = thread_id;
+    }
+
 
     @Override
     public String toString() {
         return "Sms{" +
-                "smsid=" + smsid +
-                ", phonenum='" + phonenum + '\'' +
-                ", sms='" + sms + '\'' +
-                ", smsdate='" + smsdate + '\'' +
-                ", sms_id=" + sms_id +
-                ", sms_huihua=" + sms_huihua +
+                "address='" + address + '\'' +
+                ", date='" + date + '\'' +
+                ", body='" + body + '\'' +
+                ", status='" + status + '\'' +
+                ", error_code='" + error_code + '\'' +
+                ", id=" + id +
+                ", thread_id='" + thread_id + '\'' +
                 '}';
     }
 }
