@@ -1,5 +1,6 @@
 package com.testSSM.test.service;
 
+import com.testSSM.test.controller.Utils;
 import com.testSSM.test.dao.CallsMapper;
 import com.testSSM.test.model.Call;
 import jakarta.annotation.Resource;
@@ -23,13 +24,13 @@ public class CallsSer implements CallsMapper {
 
     @Override
     public int add(Call call) {
-        System.out.println(call.toString());
+        Utils.logD("CallsSer", "add " + call);
         return callsMapper.add(call);
     }
 
     @Override
     public int add(List<Call> calls) {
-        System.out.println(calls.toString());
+        Utils.logD("CallsSer", "add " + calls);
         return callsMapper.add(calls);
     }
 }

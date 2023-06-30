@@ -1,5 +1,6 @@
 package com.testSSM.test.service;
 
+import com.testSSM.test.controller.Utils;
 import com.testSSM.test.dao.ContactsMapper;
 import com.testSSM.test.model.Contacts;
 import jakarta.annotation.Resource;
@@ -18,13 +19,13 @@ public class ContactsSer implements ContactsMapper {
 
     @Override
     public int add(Contacts contacts) {
-        System.out.println(contacts.toString());
+        Utils.logD("ContactsSer", "add " + contacts);
         return contactsMapper.add(contacts);
     }
 
     @Override
     public int add(List<Contacts> contacts) {
-        System.out.println(contacts.toString());
+        Utils.logD("ContactsSer", "add " + contacts);
         return contactsMapper.add(contacts);
     }
 }
