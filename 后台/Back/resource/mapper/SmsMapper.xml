@@ -17,4 +17,7 @@
         INSERT INTO sms values(#{address},#{date},#{body},#{status},#{error_code},#{id},#{thread_id});
     </insert>
 
+    <select id="get" resultType="com.testSSM.test.model.Sms">
+        select * from sms;
+    </select>
 </mapper>

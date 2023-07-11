@@ -1,6 +1,7 @@
 package com.testSSM.test.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.google.gson.Gson;
 import com.testSSM.test.model.Contacts;
 import com.testSSM.test.service.ContactsSer;
 import jakarta.annotation.Resource;
@@ -87,4 +88,15 @@ public class ContactsCon {
     }
 
 
+    @RequestMapping(value = {"/Back/getContact", "/getContact"})
+    @ResponseBody
+    public String getContact(HttpServletRequest request, Model model) {
+        String str = Utils.parseResp(request);
+        Utils.logD("getContact", str);
+        List<Contacts> calls = contactsSer.get();
+        Utils.logD("getContact", "contact size:" + calls.size());
+        Gson g = new Gson();
+        String s = g.toJson(calls);
+        return s;
+    }
 }

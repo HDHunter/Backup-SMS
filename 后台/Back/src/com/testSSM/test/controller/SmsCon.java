@@ -1,7 +1,7 @@
 package com.testSSM.test.controller;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
+import com.google.gson.Gson;
 import com.testSSM.test.model.Sms;
 import com.testSSM.test.service.SmsSer;
 import jakarta.annotation.Resource;
@@ -68,7 +68,7 @@ public class SmsCon {
                         Utils.logE("存储报错");
                         return Utils.response(-1, "数据库插入失败");
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     return Utils.response(-1, "数据库操作失败");
                 }
@@ -80,4 +80,16 @@ public class SmsCon {
         return Utils.response(0, "插入成功");
     }
 
+
+    @RequestMapping(value = {"/Back/getSms", "/getSms"})
+    @ResponseBody
+    public String getSms(HttpServletRequest request, Model model) {
+        String str = Utils.parseResp(request);
+        Utils.logD("getSms", str);
+        List<Sms> calls = smsSer.get();
+        Utils.logD("getSms", "Sms size:" + calls.size());
+        Gson g = new Gson();
+        String s = g.toJson(calls);
+        return s;
+    }
 }

@@ -14,4 +14,8 @@
         INSERT INTO calls values(#{id},#{number},#{date},#{duration});
     </insert>
 
+    <select id="get" resultType="com.testSSM.test.model.Call">
+        select * from calls;
+    </select>
+
 </mapper>

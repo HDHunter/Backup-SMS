@@ -1,6 +1,7 @@
 package com.testSSM.test.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.google.gson.Gson;
 import com.testSSM.test.model.Call;
 import com.testSSM.test.service.CallsSer;
 import jakarta.annotation.Resource;
@@ -73,6 +74,18 @@ public class CallsCon {
             return Utils.response(-1, "请求体解析异常");
         }
         return Utils.response(0, "插入成功");
+    }
+
+    @RequestMapping(value = {"/Back/getCalls", "/getCalls"})
+    @ResponseBody
+    public String getCalls(HttpServletRequest request, Model model) {
+        String str = Utils.parseResp(request);
+        Utils.logD("getCalls", str);
+        List<Call> calls = callsSer.get();
+        Utils.logD("getCalls", "calls size:" + calls.size());
+        Gson g = new Gson();
+        String s = g.toJson(calls);
+        return s;
     }
 
 }
