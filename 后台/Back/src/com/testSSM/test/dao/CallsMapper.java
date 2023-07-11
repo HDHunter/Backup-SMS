@@ -6,9 +6,7 @@ import java.util.List;
 
 public interface CallsMapper {
 
-    List<Call> getAllCalls();
+    List<Call> get();
 
     int add(Call call);
-
-    int add(List<Call> calls);
 }

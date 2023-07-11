@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.testSSM.test.dao.ContactsMapper">
+    <resultMap type="com.testSSM.test.model.Contacts" id="contact">
+        <id column="contactId" property="contactId"/>
+        <result column="displayName" property="displayName"/>
+        <result column="numberType" property="numberType"/>
+        <result column="photoUri" property="photoUri"/>
+        <result column="label" property="label"/>
+        <result column="number" property="number"/>
+        <result column="number1" property="number1"/>
+        <result column="number2" property="number2"/>
+        <result column="firstName" property="firstName"/>
+        <result column="lastName" property="lastName"/>
+        <result column="company" property="company"/>
+        <result column="department" property="department"/>
+        <result column="job" property="job"/>
+        <result column="jobDescription" property="jobDescription"/>
+        <result column="emailAddress" property="emailAddress"/>
+        <result column="emailAddressDisplayName" property="emailAddressDisplayName"/>
+        <result column="note" property="note"/>
+        <result column="webUrl" property="webUrl"/>
+        <result column="nickName" property="nickName"/>
+        <result column="relationName" property="relationName"/>
+        <result column="protocol" property="protocol"/>
+        <result column="customProtocol" property="customProtocol"/>
+        <result column="identity" property="identity"/>
+        <result column="namespace" property="namespace"/>
+        <result column="groupId" property="groupId"/>
+    </resultMap>
 
-    <insert id="contact" parameterType="com.testSSM.test.model.Contacts">
-        INSERT INTO
-        contact(#{contactId},#{displayName},#{photoUri},#{numberType},#{label},#{number},#{number1},#{number2},#{firstName},#{lastName},#{company},#{department},#{job},#{jobDescription},#{emailAddress},#{emailAddressDisplayName},#{note},#{webUrl},#{nickName},#{relationName},#{protocol},#{customProtocol},#{identity},#{namespace},#{groupId});
+    <insert id="add" parameterType="com.testSSM.test.model.Contacts">
+        INSERT INTO contact
+        values(#{contactId},#{displayName},#{photoUri},#{numberType},#{label},#{number},#{number1},#{number2},#{firstName},#{lastName},#{company},#{department},#{job},#{jobDescription},#{emailAddress},#{emailAddressDisplayName},#{note},#{webUrl},#{nickName},#{relationName},#{protocol},#{customProtocol},#{identity},#{namespace},#{groupId});
     </insert>
 
 </mapper>

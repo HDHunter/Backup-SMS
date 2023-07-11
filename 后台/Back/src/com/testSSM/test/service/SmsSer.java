@@ -1,5 +1,6 @@
 package com.testSSM.test.service;
 
+import com.testSSM.test.controller.Utils;
 import com.testSSM.test.dao.SmsMapper;
 import com.testSSM.test.model.Sms;
 import jakarta.annotation.Resource;
@@ -18,13 +19,14 @@ public class SmsSer implements SmsMapper {
 
     @Override
     public int add(Sms sms) {
-        System.out.println(sms.toString());
+        Utils.logD("SmsSer", "add " + sms);
         return smsMapper.add(sms);
     }
 
     @Override
-    public int add(List<Sms> sms) {
-        System.out.println(sms.toString());
-        return smsMapper.add(sms);
+    public List<Sms> get() {
+        Utils.logD("SmsSer", "get ");
+        return smsMapper.get();
     }
+
 }

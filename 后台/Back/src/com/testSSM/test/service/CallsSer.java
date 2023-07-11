@@ -16,10 +16,15 @@ public class CallsSer implements CallsMapper {
     @Autowired
     private CallsMapper callsMapper;
 
+    public CallsSer(CallsMapper callsMapper) {
+        this.callsMapper = callsMapper;
+    }
+
 
     @Override
-    public List<Call> getAllCalls() {
-        return null;
+    public List<Call> get() {
+        Utils.logD("CallsSer", "get ");
+        return callsMapper.get();
     }
 
     @Override
@@ -28,9 +33,4 @@ public class CallsSer implements CallsMapper {
         return callsMapper.add(call);
     }
 
-    @Override
-    public int add(List<Call> calls) {
-        Utils.logD("CallsSer", "add " + calls);
-        return callsMapper.add(calls);
-    }
 }

@@ -8,5 +8,5 @@ import java.util.List;
 public interface ContactsMapper {
     int add(Contacts contacts);
 
-    int add(List<Contacts> contacts);
+    List<Contacts> get();
 }

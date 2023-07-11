@@ -42,7 +42,7 @@ public class Call {
 
     @Override
     public String toString() {
-        return "Contacts{" +
+        return "Call{" +
                 "id=" + id +
                 ", number='" + number + '\'' +
                 ", date='" + date + '\'' +

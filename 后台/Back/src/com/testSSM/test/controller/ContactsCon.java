@@ -18,6 +18,8 @@ import java.util.Map;
 
 @Controller
 public class ContactsCon {
+
+
     @Resource
     @Autowired
     private ContactsSer contactsSer;
@@ -34,30 +36,54 @@ public class ContactsCon {
                 Map<String, String> item = (Map<String, String>) obj;
                 list2.add(item);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Contacts contacts = new Contacts();
-        for (Map<String, String> map2 : list2) {
-            if (map2.get("number") == null || map2.get("number").equals("") || map2.get("number").equals("null")) {
-                contacts.setNumber("0");
-            } else {
-                contacts.setNumber1(map2.get("number"));
-            }
-            if (map2.get("name") == null || map2.get("name").equals("null") || map2.get("name").equals("")) {
-                contacts.setDisplayName("");
-            } else {
-                contacts.setDisplayName(map2.get("name"));
-            }
-            int aa = contactsSer.add(contacts);
-            if (aa != 1 || contactsSer.add(contacts) != -1) {
-                if (aa != -1) {
-                    System.out.println("存储报错" + contactsSer.add(contacts));
-                    return "<h1>Fail</h1>";
+
+            Contacts contacts = new Contacts();
+            for (Map<String, String> map2 : list2) {
+                contacts.setNumber(map2.get("number"));
+                contacts.setNumber1(map2.get("number1"));
+                contacts.setNumber2(map2.get("number2"));
+                String contactId = map2.get("contactId");
+                if (contactId == null || contactId.equals("")) {
+                    contacts.setContactId(0);
+                } else {
+                    contacts.setContactId(Integer.parseInt(contactId));
+                }
+                contacts.setCompany(map2.get("company"));
+                contacts.setDepartment(map2.get("department"));
+                contacts.setCustomProtocol(map2.get("customProtocol"));
+                contacts.setJob(map2.get("job"));
+                contacts.setDisplayName(map2.get("displayName"));
+                contacts.setIdentity(map2.get("identity"));
+                contacts.setEmailAddress(map2.get("emailAddress"));
+                contacts.setLabel(map2.get("label"));
+                contacts.setEmailAddressDisplayName(map2.get("emailAddressDisplayName"));
+                contacts.setGroupId(map2.get("groupId"));
+                contacts.setNote(map2.get("note"));
+                contacts.setNamespace(map2.get("namespace"));
+                contacts.setProtocol(map2.get("protocol"));
+                contacts.setLastName(map2.get("lastName"));
+                contacts.setFirstName(map2.get("firstName"));
+                contacts.setNickName(map2.get("nickName"));
+                contacts.setJobDescription(map2.get("jobDescription"));
+                contacts.setNumberType(map2.get("numberType"));
+                contacts.setPhotoUri(map2.get("photoUri"));
+                contacts.setWebUrl(map2.get("webUrl"));
+                contacts.setRelationName(map2.get("relationName"));
+                try {
+                    if (contactsSer.add(contacts) != 1) {
+                        Utils.logE("存储报错");
+                        return Utils.response(-1, "数据库插入失败");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return Utils.response(-1, "数据库操作失败");
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Utils.response(-1, "请求体解析异常");
         }
-        return "<h1>OK</h1>";
+        return Utils.response(0, "插入成功");
     }
 
 

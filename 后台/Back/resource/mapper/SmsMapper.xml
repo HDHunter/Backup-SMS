@@ -13,8 +13,8 @@
         <result column="thread_id" property="thread_id"/>
     </resultMap>
 
-    <insert id="sms" parameterType="com.testSSM.test.model.Sms">
-        INSERT INTO sms(#{address},#{date},#{body},#{status},#{error_code},#{id},#{thread_id});
+    <insert id="add" parameterType="com.testSSM.test.model.Sms">
+        INSERT INTO sms values(#{address},#{date},#{body},#{status},#{error_code},#{id},#{thread_id});
     </insert>
 
 </mapper>

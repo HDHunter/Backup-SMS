@@ -20,6 +20,10 @@ import java.util.Map;
 
 @Controller
 public class CallsCon {
+
+
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     @Resource
     @Autowired
     private CallsSer callsSer;
@@ -38,36 +42,37 @@ public class CallsCon {
                 Map<String, String> item = (Map<String, String>) obj;
                 list2.add(item);
             }
+
+            Call call = new Call();
+            for (Map<String, String> map2 : list2) {
+                call.setNumber(map2.get("number"));
+                if (map2.get("id") == null || map2.get("id").equals("")) {
+                    call.setId(0);
+                } else {
+                    call.setId(Integer.parseInt(map2.get("id")));
+                }
+                String res;
+                long lt = Long.parseLong(map2.get("date"));
+                Date date = new Date(lt);
+                res = simpleDateFormat.format(date);
+                call.setDate(res);
+                call.setDuration(Integer.parseInt(map2.get("duration")));
+                call.setNumber(map2.get("number"));
+                try {
+                    if (callsSer.add(call) != 1) {
+                        Utils.logE("存储报错");
+                        return Utils.response(-1, "数据库插入失败");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return Utils.response(-1, "数据库操作失败");
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            return Utils.response(-1, "请求体解析异常");
         }
-        Call call = new Call();
-        for (Map<String, String> map2 : list2) {
-            call.setNumber(map2.get("手机号"));
-            call.setDate(map2.get("内容"));
-            if (map2.get("id") == null || map2.get("id").equals("")) {
-                call.setId(0);
-            } else {
-                call.setId(Integer.parseInt(map2.get("id")));
-            }
-            String res;
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            long lt = Long.parseLong(map2.get("时间"));
-            Date date = new Date(lt);
-            res = simpleDateFormat.format(date);
-            call.setDate(res);
-
-            if (map2.get("对话的序号") == null || map2.get("对话的序号").equals("")) {
-                call.setId(0);
-            } else {
-                call.setId(34);
-            }
-            if (callsSer.add(call) != 1) {
-                System.out.println("存储报错");
-                return "<h1>Fail</h1>";
-            }
-        }
-        return "<h1>OK</h1>";
+        return Utils.response(0, "插入成功");
     }
 
 }

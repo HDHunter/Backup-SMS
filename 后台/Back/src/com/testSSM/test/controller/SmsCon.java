@@ -1,6 +1,7 @@
 package com.testSSM.test.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.testSSM.test.model.Sms;
 import com.testSSM.test.service.SmsSer;
 import jakarta.annotation.Resource;
@@ -20,6 +21,8 @@ import java.util.Map;
 
 @Controller
 public class SmsCon {
+
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Resource
     @Autowired
     private SmsSer smsSer;
@@ -38,37 +41,43 @@ public class SmsCon {
                 Map<String, String> item = (Map<String, String>) obj;
                 list2.add(item);
             }
+
+            Sms smS = new Sms();
+            for (Map<String, String> map2 : list2) {
+                smS.setAddress(map2.get("address"));
+                smS.setBody(map2.get("body"));
+                if (map2.get("id") == null || map2.get("id").equals("")) {
+                    smS.setId(0);
+                } else {
+                    smS.setId(Integer.parseInt(map2.get("id")));
+                }
+                String res;
+                long lt = Long.parseLong(map2.get("date"));
+                Date date = new Date(lt);
+                res = simpleDateFormat.format(date);
+                smS.setDate(res);
+                smS.setStatus(map2.get("status"));
+                smS.setError_code(map2.get("error_code"));
+                if (map2.get("thread_id") == null || map2.get("thread_id").equals("")) {
+                    smS.setThread_id("0");
+                } else {
+                    smS.setThread_id(map2.get("thread_id"));
+                }
+                try {
+                    if (smsSer.add(smS) != 1) {
+                        Utils.logE("存储报错");
+                        return Utils.response(-1, "数据库插入失败");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return Utils.response(-1, "数据库操作失败");
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return Utils.response(-1, "请求体解析异常");
         }
-        Sms smS = new Sms();
-        for (Map<String, String> map2 : list2) {
-            smS.setAddress(map2.get("手机号"));
-            smS.setBody(map2.get("内容"));
-            if (map2.get("id") == null || map2.get("id").equals("")) {
-                smS.setId(0);
-            } else {
-                smS.setId(Integer.parseInt(map2.get("id")));
-            }
-            String res;
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            long lt = Long.parseLong(map2.get("时间"));
-            Date date = new Date(lt);
-            res = simpleDateFormat.format(date);
-            smS.setDate(res);
-
-            if (map2.get("对话的序号") == null || map2.get("对话的序号").equals("")) {
-                smS.setThread_id("0");
-            } else {
-                smS.setThread_id(map2.get("对话的序号"));
-            }
-            if (smsSer.add(smS) != 1) {
-                System.out.println("存储报错");
-                return "<h1>Fail</h1>";
-            }
-        }
-        return "<h1>OK</h1>";
+        return Utils.response(0, "插入成功");
     }
 
 }

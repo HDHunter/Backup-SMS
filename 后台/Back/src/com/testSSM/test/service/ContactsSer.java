@@ -24,8 +24,9 @@ public class ContactsSer implements ContactsMapper {
     }
 
     @Override
-    public int add(List<Contacts> contacts) {
-        Utils.logD("ContactsSer", "add " + contacts);
-        return contactsMapper.add(contacts);
+    public List<Contacts> get() {
+        Utils.logD("ContactsSer", "get ");
+        return contactsMapper.get();
     }
+
 }

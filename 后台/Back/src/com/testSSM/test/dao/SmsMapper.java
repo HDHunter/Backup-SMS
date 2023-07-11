@@ -8,5 +8,5 @@ import java.util.List;
 public interface SmsMapper {
     int add(Sms sms);
 
-    int add(List<Sms> sms);
+    List<Sms> get();
 }
