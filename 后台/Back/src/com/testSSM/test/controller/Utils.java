@@ -1,10 +1,9 @@
 package com.testSSM.test.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import com.testSSM.test.model.HttpResponse;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.beans.Encoder;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -59,11 +58,8 @@ public class Utils {
         return str;
     }
 
-    public static String response(int code, String msg) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", code);
-        jsonObject.put("msg", msg);
-        return jsonObject.toString();
+    public static HttpResponse response(int code, String msg) {
+        return new HttpResponse(code, msg);
     }
 
     public static String filterEmoji(String source) {

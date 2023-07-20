@@ -1,7 +1,8 @@
 package com.testSSM.test.controller;
 
 import com.alibaba.fastjson.JSONArray;
-import com.google.gson.Gson;
+import com.testSSM.test.model.Contacts;
+import com.testSSM.test.model.HttpResponse;
 import com.testSSM.test.model.Sms;
 import com.testSSM.test.service.SmsSer;
 import jakarta.annotation.Resource;
@@ -13,10 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -29,7 +27,7 @@ public class SmsCon {
 
     @RequestMapping(value = {"/Back/sms", "/sms"})
     @ResponseBody
-    public String sms(HttpServletRequest request, Model model) {
+    public HttpResponse sms(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();
         try {
             String str = Utils.parseResp(request);
@@ -41,8 +39,15 @@ public class SmsCon {
                 Map<String, String> item = (Map<String, String>) obj;
                 list2.add(item);
             }
-
+            Utils.logD("sms 上传条数:" + list2.size());
             Sms smS = new Sms();
+            List<Sms> smsList = smsSer.get();
+            List<Sms> success = new ArrayList<>();
+            Map<String, Sms> maps = new HashMap<>();
+            Utils.logD("Sms 已经保存条数:" + smsList.size());
+            for (Sms c : smsList) {
+                maps.put(c.getDate(), c);
+            }
             for (Map<String, String> map2 : list2) {
                 smS.setAddress(map2.get("address"));
                 smS.setBody(map2.get("body"));
@@ -56,6 +61,9 @@ public class SmsCon {
                 Date date = new Date(lt);
                 res = simpleDateFormat.format(date);
                 smS.setDate(res);
+                if (maps.get(res) != null) {
+                    continue;
+                }
                 smS.setStatus(map2.get("status"));
                 smS.setError_code(map2.get("error_code"));
                 if (map2.get("thread_id") == null || map2.get("thread_id").equals("")) {
@@ -68,11 +76,13 @@ public class SmsCon {
                         Utils.logE("存储报错");
                         return Utils.response(-1, "数据库插入失败");
                     }
+                    success.add(smS);
                 } catch (Exception e) {
                     e.printStackTrace();
                     return Utils.response(-1, "数据库操作失败");
                 }
             }
+            Utils.logD("sms 插入成功条数:" + success.size());
         } catch (Exception e) {
             e.printStackTrace();
             return Utils.response(-1, "请求体解析异常");
@@ -83,13 +93,11 @@ public class SmsCon {
 
     @RequestMapping(value = {"/Back/getSms", "/getSms"})
     @ResponseBody
-    public String getSms(HttpServletRequest request, Model model) {
+    public List<Sms> getSms(HttpServletRequest request, Model model) {
         String str = Utils.parseResp(request);
         Utils.logD("getSms", str);
         List<Sms> calls = smsSer.get();
         Utils.logD("getSms", "Sms size:" + calls.size());
-        Gson g = new Gson();
-        String s = g.toJson(calls);
-        return s;
+        return calls;
     }
 }

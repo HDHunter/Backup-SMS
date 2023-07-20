@@ -1,8 +1,8 @@
 package com.testSSM.test.controller;
 
 import com.alibaba.fastjson.JSONArray;
-import com.google.gson.Gson;
 import com.testSSM.test.model.Call;
+import com.testSSM.test.model.HttpResponse;
 import com.testSSM.test.service.CallsSer;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -31,20 +28,26 @@ public class CallsCon {
 
     @RequestMapping(value = {"/Back/calls", "/calls"})
     @ResponseBody
-    public String call(HttpServletRequest request, Model model) {
+    public HttpResponse call(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();
         try {
             String str = Utils.parseResp(request);
             //转为list集合
             List<Object> list = JSONArray.parseArray(str, Object.class);
-
             for (Object obj : list) {
                 //将list集合中的object转为map，然后放到list2中形成	  List<Map<String,String>>
                 Map<String, String> item = (Map<String, String>) obj;
                 list2.add(item);
             }
-
+            Utils.logD("call 上传条数:" + list2.size());
             Call call = new Call();
+            List<Call> calls = callsSer.get();
+            List<Call> success = new ArrayList<>();
+            Map<String, Call> maps = new HashMap<>();
+            Utils.logD("call 已经保存条数:" + calls.size());
+            for (Call c : calls) {
+                maps.put(c.getDate(), c);
+            }
             for (Map<String, String> map2 : list2) {
                 call.setNumber(map2.get("number"));
                 if (map2.get("id") == null || map2.get("id").equals("")) {
@@ -56,6 +59,9 @@ public class CallsCon {
                 long lt = Long.parseLong(map2.get("date"));
                 Date date = new Date(lt);
                 res = simpleDateFormat.format(date);
+                if (maps.get(res) != null) {
+                    continue;
+                }
                 call.setDate(res);
                 call.setDuration(Integer.parseInt(map2.get("duration")));
                 call.setNumber(map2.get("number"));
@@ -64,11 +70,13 @@ public class CallsCon {
                         Utils.logE("存储报错");
                         return Utils.response(-1, "数据库插入失败");
                     }
+                    success.add(call);
                 } catch (Exception e) {
                     e.printStackTrace();
                     return Utils.response(-1, "数据库操作失败");
                 }
             }
+            Utils.logD("call 插入成功条数:" + success.size());
         } catch (Exception e) {
             e.printStackTrace();
             return Utils.response(-1, "请求体解析异常");
@@ -78,14 +86,12 @@ public class CallsCon {
 
     @RequestMapping(value = {"/Back/getCalls", "/getCalls"})
     @ResponseBody
-    public String getCalls(HttpServletRequest request, Model model) {
+    public List<Call> getCalls(HttpServletRequest request, Model model) {
         String str = Utils.parseResp(request);
         Utils.logD("getCalls", str);
         List<Call> calls = callsSer.get();
         Utils.logD("getCalls", "calls size:" + calls.size());
-        Gson g = new Gson();
-        String s = g.toJson(calls);
-        return s;
+        return calls;
     }
 
 }

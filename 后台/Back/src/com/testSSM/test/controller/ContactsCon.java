@@ -1,8 +1,9 @@
 package com.testSSM.test.controller;
 
 import com.alibaba.fastjson.JSONArray;
-import com.google.gson.Gson;
+import com.testSSM.test.model.Call;
 import com.testSSM.test.model.Contacts;
+import com.testSSM.test.model.HttpResponse;
 import com.testSSM.test.service.ContactsSer;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +29,7 @@ public class ContactsCon {
 
     @RequestMapping(value = {"/Back/contact", "/contact"})
     @ResponseBody
-    public String contact(HttpServletRequest request, Model model) {
+    public HttpResponse contact(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();
         try {
             String str = Utils.parseResp(request);
@@ -37,10 +39,20 @@ public class ContactsCon {
                 Map<String, String> item = (Map<String, String>) obj;
                 list2.add(item);
             }
-
+            Utils.logD("contact 上传条数:" + list2.size());
             Contacts contacts = new Contacts();
+            List<Contacts> contactsList = contactsSer.get();
+            List<Contacts> success = new ArrayList<>();
+            Map<String, Contacts> maps = new HashMap<>();
+            Utils.logD("Contacts 已经保存条数:" + contactsList.size());
+            for (Contacts c : contactsList) {
+                maps.put(c.getNumber(), c);
+            }
             for (Map<String, String> map2 : list2) {
                 contacts.setNumber(map2.get("number"));
+                if (maps.get(contacts.getNumber()) != null) {
+                    continue;
+                }
                 contacts.setNumber1(map2.get("number1"));
                 contacts.setNumber2(map2.get("number2"));
                 String contactId = map2.get("contactId");
@@ -75,11 +87,13 @@ public class ContactsCon {
                         Utils.logE("存储报错");
                         return Utils.response(-1, "数据库插入失败");
                     }
+                    success.add(contacts);
                 } catch (Exception e) {
                     e.printStackTrace();
                     return Utils.response(-1, "数据库操作失败");
                 }
             }
+            Utils.logD("contacts 插入成功条数:" + success.size());
         } catch (Exception e) {
             e.printStackTrace();
             return Utils.response(-1, "请求体解析异常");
@@ -90,13 +104,11 @@ public class ContactsCon {
 
     @RequestMapping(value = {"/Back/getContact", "/getContact"})
     @ResponseBody
-    public String getContact(HttpServletRequest request, Model model) {
+    public List<Contacts> getContact(HttpServletRequest request, Model model) {
         String str = Utils.parseResp(request);
         Utils.logD("getContact", str);
         List<Contacts> calls = contactsSer.get();
         Utils.logD("getContact", "contact size:" + calls.size());
-        Gson g = new Gson();
-        String s = g.toJson(calls);
-        return s;
+        return calls;
     }
 }

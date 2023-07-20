@@ -5,18 +5,28 @@ android {
     buildToolsVersion "31.0.0"
     defaultConfig {
         applicationId "com.hunter.baby"
-        minSdkVersion 19
+        minSdkVersion 26
         targetSdkVersion 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 20230720
+        versionName "20230720"
         multiDexEnabled true
+    }
+    signingConfigs {
+        release {
+            storeFile file("../hunter.keystore")
+            storePassword "abcde12345"
+            keyAlias "Hunter"
+            keyPassword "abcde12345"
+        }
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -41,7 +51,7 @@ dependencies {
     api 'com.android.support:appcompat-v7:28.0.0'
     api 'com.android.support.constraint:constraint-layout:2.0.4'
 
-    implementation 'com.alibaba:fastjson:2.0.34'
+    api 'com.alibaba:fastjson:2.0.34'
 
     api "com.squareup.okhttp3:okhttp:4.10.0"
     api "com.squareup.okio:okio:2.8.0"

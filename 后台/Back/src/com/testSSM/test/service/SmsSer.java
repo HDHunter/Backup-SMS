@@ -25,7 +25,7 @@ public class SmsSer implements SmsMapper {
 
     @Override
     public List<Sms> get() {
-        Utils.logD("SmsSer", "get ");
+        Utils.logD("SmsSer", "start get");
         return smsMapper.get();
     }
 

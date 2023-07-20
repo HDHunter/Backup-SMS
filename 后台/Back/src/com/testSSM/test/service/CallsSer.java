@@ -23,7 +23,7 @@ public class CallsSer implements CallsMapper {
 
     @Override
     public List<Call> get() {
-        Utils.logD("CallsSer", "get ");
+        Utils.logD("CallsSer", "start get");
         return callsMapper.get();
     }
 
