@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         ContentResolver contentResolver = getContentResolver();
-        Uri uri = Uri.parse("content://mms-sms/conversations/");
+        Uri uri = Uri.parse("content://sms/");
         String[] line = {Telephony.Sms.ADDRESS, Telephony.Sms.BODY, Telephony.Sms.DATE, Telephony.Sms.STATUS, Telephony.Sms.ERROR_CODE, "_id", Telephony.Sms.THREAD_ID};
         Cursor c = contentResolver.query(uri, line, null, null, null);
         ArrayList<Map<String, String>> list = new ArrayList<>();
