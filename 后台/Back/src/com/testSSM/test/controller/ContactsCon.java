@@ -1,7 +1,7 @@
 package com.testSSM.test.controller;
 
-import com.alibaba.fastjson.JSONArray;
-import com.testSSM.test.model.Call;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.testSSM.test.model.Contacts;
 import com.testSSM.test.model.HttpResponse;
 import com.testSSM.test.service.ContactsSer;
@@ -18,7 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * number作为排除标识
+ */
 @Controller
 public class ContactsCon {
 
@@ -33,10 +35,10 @@ public class ContactsCon {
         List<Map<String, String>> list2 = new ArrayList<>();
         try {
             String str = Utils.parseResp(request);
-            List<Object> list = JSONArray.parseArray(str, Object.class);
+            JSONObject list = JSON.parseObject(str);
 
-            for (Object obj : list) {
-                Map<String, String> item = (Map<String, String>) obj;
+            for (String obj : list.keySet()) {
+                Map<String, String> item = (Map<String, String>) list.get(obj);
                 list2.add(item);
             }
             Utils.logD("contact 上传条数:" + list2.size());
@@ -48,16 +50,18 @@ public class ContactsCon {
             for (Contacts c : contactsList) {
                 maps.put(c.getNumber(), c);
             }
+            int index = contactsList.size();
             for (Map<String, String> map2 : list2) {
                 contacts.setNumber(map2.get("number"));
-                if (maps.get(contacts.getNumber()) != null) {
+                if (contacts.getNumber() == null || maps.get(contacts.getNumber()) != null) {
+                    Utils.logE("扔掉一条:" + map2);
                     continue;
                 }
                 contacts.setNumber1(map2.get("number1"));
                 contacts.setNumber2(map2.get("number2"));
                 String contactId = map2.get("contactId");
                 if (contactId == null || contactId.equals("")) {
-                    contacts.setContactId(0);
+                    contacts.setContactId(index);
                 } else {
                     contacts.setContactId(Integer.parseInt(contactId));
                 }
@@ -87,6 +91,7 @@ public class ContactsCon {
                         Utils.logE("存储报错");
                         return Utils.response(-1, "数据库插入失败");
                     }
+                    index += 1;
                     success.add(contacts);
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -1,7 +1,6 @@
 package com.testSSM.test.controller;
 
 import com.alibaba.fastjson.JSONArray;
-import com.testSSM.test.model.Contacts;
 import com.testSSM.test.model.HttpResponse;
 import com.testSSM.test.model.Sms;
 import com.testSSM.test.service.SmsSer;
@@ -16,7 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
+/**
+ * date日期时间作为排除标识
+ */
 @Controller
 public class SmsCon {
 
@@ -48,20 +49,26 @@ public class SmsCon {
             for (Sms c : smsList) {
                 maps.put(c.getDate(), c);
             }
+            int index = smsList.size();
             for (Map<String, String> map2 : list2) {
                 smS.setAddress(map2.get("address"));
                 smS.setBody(map2.get("body"));
                 if (map2.get("id") == null || map2.get("id").equals("")) {
-                    smS.setId(0);
+                    smS.setId(index);
                 } else {
                     smS.setId(Integer.parseInt(map2.get("id")));
                 }
                 String res;
-                long lt = Long.parseLong(map2.get("date"));
-                Date date = new Date(lt);
-                res = simpleDateFormat.format(date);
-                smS.setDate(res);
-                if (maps.get(res) != null) {
+                try {
+                    long lt = Long.parseLong(map2.get("date"));
+                    Date date = new Date(lt);
+                    res = simpleDateFormat.format(date);
+                    smS.setDate(res);
+                } catch (Exception e) {
+                    smS.setDate(map2.get("date"));
+                }
+                if (smS.getDate() == null || maps.get(smS.getDate()) != null) {
+                    Utils.logE("扔掉一条:" + map2);
                     continue;
                 }
                 smS.setStatus(map2.get("status"));
@@ -76,6 +83,7 @@ public class SmsCon {
                         Utils.logE("存储报错");
                         return Utils.response(-1, "数据库插入失败");
                     }
+                    index += 1;
                     success.add(smS);
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -15,7 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
+/**
+ * date日期时间作为排除标识
+ */
 @Controller
 public class CallsCon {
 
@@ -48,21 +50,27 @@ public class CallsCon {
             for (Call c : calls) {
                 maps.put(c.getDate(), c);
             }
+            int index = calls.size();
             for (Map<String, String> map2 : list2) {
                 call.setNumber(map2.get("number"));
                 if (map2.get("id") == null || map2.get("id").equals("")) {
-                    call.setId(0);
+                    call.setId(index);
                 } else {
                     call.setId(Integer.parseInt(map2.get("id")));
                 }
                 String res;
-                long lt = Long.parseLong(map2.get("date"));
-                Date date = new Date(lt);
-                res = simpleDateFormat.format(date);
-                if (maps.get(res) != null) {
+                try {
+                    long lt = Long.parseLong(map2.get("date"));
+                    Date date = new Date(lt);
+                    res = simpleDateFormat.format(date);
+                    call.setDate(res);
+                } catch (Exception e) {
+                    call.setDate(map2.get("date"));
+                }
+                if (call.getDate() == null || maps.get(call.getDate()) != null) {
+                    Utils.logE("扔掉一条:" + map2);
                     continue;
                 }
-                call.setDate(res);
                 call.setDuration(Integer.parseInt(map2.get("duration")));
                 call.setNumber(map2.get("number"));
                 try {
@@ -70,6 +78,7 @@ public class CallsCon {
                         Utils.logE("存储报错");
                         return Utils.response(-1, "数据库插入失败");
                     }
+                    index += 1;
                     success.add(call);
                 } catch (Exception e) {
                     e.printStackTrace();
