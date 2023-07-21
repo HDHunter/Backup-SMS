@@ -8,10 +8,11 @@
         <result column="date" property="date"/>
         <result column="number" property="number"/>
         <result column="duration" property="duration"/>
+        <result column="type" property="type"/>
     </resultMap>
 
     <insert id="add" parameterType="com.testSSM.test.model.Call">
-        INSERT INTO calls values(#{id},#{number},#{date},#{duration});
+        INSERT INTO calls values(#{id},#{number},#{date},#{duration},#{type});
     </insert>
 
     <select id="get" resultType="com.testSSM.test.model.Call">

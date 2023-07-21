@@ -58,6 +58,11 @@ public class CallsCon {
                 } else {
                     call.setId(Integer.parseInt(map2.get("id")));
                 }
+                if (map2.get("type") == null || map2.get("type").equals("")) {
+                    call.setType(0);
+                } else {
+                    call.setType(Integer.parseInt(map2.get("type")));
+                }
                 String res;
                 try {
                     long lt = Long.parseLong(map2.get("date"));
