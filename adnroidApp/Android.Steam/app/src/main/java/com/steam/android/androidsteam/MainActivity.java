@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         ContentResolver contentResolver = getContentResolver();
-        Cursor c = contentResolver.query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DATE, CallLog.Calls.DURATION}, null,
+        Cursor c = contentResolver.query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DATE, CallLog.Calls.DURATION,CallLog.Calls.TYPE}, null,
                 null, null);
         ArrayList<Map<String, Object>> list = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 Map<String, Object> map = new HashMap<>();
                 map.put("number", c.getString(Math.max(c.getColumnIndex(CallLog.Calls.NUMBER), 0)));
                 map.put("date", dateFormat.format(new Date(c.getLong(1))));
+                map.put("type", c.getString(Math.max(c.getColumnIndex(CallLog.Calls.TYPE), 0)));
                 map.put(CallLog.Calls.DURATION, c.getString(Math.max(c.getColumnIndex(CallLog.Calls.DURATION), 0)));
 //                YLog.d("CallsYLog", map.toString());
                 list.add(map);

@@ -63,7 +63,7 @@ public abstract class HttpStringListener implements Callback {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    onFailure(-1, "");
+                    onSuccess(res.code(), finalData);
                 }
             });
         }
