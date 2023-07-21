@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.provider.Telephony;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -43,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void uploadqu(View view) {
         tv.setText("");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 123);
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_PICK, null);
+        intent.setType("image/*");
+        startActivityForResult(intent, 2020);
     }
 
     public void sms(View view) {
@@ -121,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         ContentResolver contentResolver = getContentResolver();
-        Cursor c = contentResolver.query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DATE, CallLog.Calls.DURATION,CallLog.Calls.TYPE}, null,
+        Cursor c = contentResolver.query(CallLog.Calls.CONTENT_URI, new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DATE, CallLog.Calls.DURATION, CallLog.Calls.TYPE}, null,
                 null, null);
         ArrayList<Map<String, Object>> list = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
@@ -430,10 +438,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == 2020) {
-                tv.setText(data.toString());
-                YLog.d("", data.toString());
-                Http h = new Http(this);
-                h.imageUpload(data.getData().toString());
+                tv.setText(data.getDataString());
+                YLog.d("zzzzzzzz", data.toString());
+//                Http h = new Http(this);
+//                h.imageUpload(data.getData().toString());
+                String path;
+                Uri uri = data.getData();
+                if (!TextUtils.isEmpty(uri.getAuthority())) {
+                    Cursor cursor = getContentResolver().query(uri,
+                            new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+                    if (null == cursor) {
+                        Toast.makeText(this, "图片没找到", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    cursor.moveToFirst();
+                    path = cursor.getString(Math.max(cursor.getColumnIndex(MediaStore.Images.Media.DATA), 0));
+                    cursor.close();
+                } else {
+                    path = uri.getPath();
+                }
+                YLog.e("zzzzzzzz", "path:" + path);
             }
         }
     }
