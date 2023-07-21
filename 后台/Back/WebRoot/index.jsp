@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="java.util.*"%>
 <% String appPath = request.getContextPath(); %>
 <html>
 <head>
@@ -8,5 +8,19 @@
 </head>
 <body>
 <h1>Back Test</h1>
+
+<%
+	out.println("Hello World!");
+%>
+<br>
+<%=new Date().toLocaleString() %>
+
+<%! int day = 7; %>
+<h3>IF...ELSE 实例</h3>
+<% if (day == 1 | day == 7) { %>
+      <p>今天是周末</p>
+<% } else { %>
+      <p>今天不是周末</p>
+<% } %>
 </body>
 <html>

@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com</groupId>
-    <artifactId>first</artifactId>
+    <groupId>com.hunter.back</groupId>
+    <artifactId>hunterback</artifactId>
     <packaging>war</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <name>first Maven Webapp</name>
+    <version>1.0</version>
+    <name>sms hunter backup maven</name>
     <url>http://maven.apache.org</url>
     <!--6.0版本的SpringMVC只支持JDK17以上版本-->
     <properties>
