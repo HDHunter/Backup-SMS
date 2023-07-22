@@ -6,4 +6,4 @@
     c.setPath("127.0.0.1");
     response.addCookie(c);
 %>
-<a href="getCookie.jsp">跳转到获取cookie的页面</a>
+<a href="getCalls.jsp">跳转到获取cookie的页面</a>
