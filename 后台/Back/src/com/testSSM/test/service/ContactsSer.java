@@ -1,6 +1,6 @@
 package com.testSSM.test.service;
 
-import com.testSSM.test.controller.Utils;
+import com.testSSM.test.biz.Utils;
 import com.testSSM.test.dao.ContactsMapper;
 import com.testSSM.test.model.Contacts;
 import jakarta.annotation.Resource;

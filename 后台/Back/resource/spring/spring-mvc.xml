@@ -10,7 +10,7 @@
     <context:component-scan base-package="com.testSSM.test.controller"/>
     <!--避免IE执行AJAX时，返回JSON出现下载文件 -->
     <bean id="mappingJacksonHttpMessageConverter"
-          class="com.testSSM.test.controller.HunterConverter">
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
         <property name="supportedMediaTypes">
             <list>
                 <value>text/plain</value>
@@ -28,11 +28,22 @@
         </property>
     </bean>
     <!-- 定义跳转的文件的前后缀 ，视图模式配置-->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <!-- 这里的配置我的理解是自动给后面action的方法return的字符串加上前缀和后缀，变成一个 可用的url地址 -->
-        <property name="prefix" value="/WEB-INF/jsp/"/>
-        <property name="suffix" value=".jsp"/>
-    </bean>
+<!--    <bean class="com.testSSM.test.biz.HunterResourceViewResolver">-->
+<!--        <property name="viewClass" value="com.testSSM.test.biz.HtmlResourceView"/>-->
+<!--        &lt;!&ndash; 这里的配置我的理解是自动给后面action的方法return的字符串加上前缀和后缀，变成一个 可用的url地址 &ndash;&gt;-->
+<!--        <property name="prefix" value="/"/>-->
+<!--&lt;!&ndash;        <property name="suffix" value=".html"/>&ndash;&gt;-->
+<!--        <property name="contentType" value="text/html"/>-->
+<!--        <property name="order" value="10"/>-->
+<!--    </bean>-->
+
+<!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+<!--        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>-->
+<!--        &lt;!&ndash; 这里的配置我的理解是自动给后面action的方法return的字符串加上前缀和后缀，变成一个 可用的url地址 &ndash;&gt;-->
+<!--        <property name="prefix" value="/jsp"/>-->
+<!--        <property name="suffix" value=".jsp"/>-->
+<!--        <property name="order" value="0"/>-->
+<!--    </bean>-->
 
     <!-- 配置文件上传，如果没有使用文件上传可以不用配置，当然如果不配，那么配置文件中也不必引入上传组件包 -->
     <bean id="multipartResolver"
@@ -44,5 +55,4 @@
         <!-- 内存中的最大值 -->
         <property name="maxInMemorySize" value="40960"/>
     </bean>
-
 </beans>
