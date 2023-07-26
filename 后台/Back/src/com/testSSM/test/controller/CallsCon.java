@@ -29,7 +29,7 @@ public class CallsCon {
     @Autowired
     private CallsSer callsSer;
 
-    @RequestMapping(value = {"/Back/calls", "/calls"})
+    @RequestMapping(value = {"/calls"})
     @ResponseBody
     public HttpResponse call(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();
@@ -99,7 +99,7 @@ public class CallsCon {
         return Utils.response(0, "插入成功");
     }
 
-    @RequestMapping(value = {"/Back/getCalls", "/getCalls"})
+    @RequestMapping(value = {"/getCalls"})
     @ResponseBody
     public List<Call> getCalls(HttpServletRequest request, Model model) {
         String str = Utils.parseResp(request);

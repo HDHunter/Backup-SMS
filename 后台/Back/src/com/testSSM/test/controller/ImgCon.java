@@ -22,7 +22,7 @@ public class ImgCon {
     @Autowired
     private ContactsSer contactsSer;
 
-    @RequestMapping(value = {"/Back/img", "/img"})
+    @RequestMapping(value = {"/img"})
     @ResponseBody
     public String img(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();

@@ -27,7 +27,7 @@ public class SmsCon {
     @Autowired
     private SmsSer smsSer;
 
-    @RequestMapping(value = {"/Back/sms", "/sms"})
+    @RequestMapping(value = {"/sms"})
     @ResponseBody
     public HttpResponse sms(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();
@@ -100,7 +100,7 @@ public class SmsCon {
     }
 
 
-    @RequestMapping(value = {"/Back/getSms", "/getSms"})
+    @RequestMapping(value = {"/getSms"})
     @ResponseBody
     public List<Sms> getSms(HttpServletRequest request, Model model) {
         String str = Utils.parseResp(request);

@@ -30,7 +30,7 @@ public class ContactsCon {
     @Autowired
     private ContactsSer contactsSer;
 
-    @RequestMapping(value = {"/Back/contact", "/contact"})
+    @RequestMapping(value = {"/contact"})
     @ResponseBody
     public HttpResponse contact(HttpServletRequest request, Model model) {
         List<Map<String, String>> list2 = new ArrayList<>();
@@ -108,7 +108,7 @@ public class ContactsCon {
     }
 
 
-    @RequestMapping(value = {"/Back/getContact", "/getContact"})
+    @RequestMapping(value = {"/getContact"})
     @ResponseBody
     public List<Contacts> getContact(HttpServletRequest request, Model model) {
         String str = Utils.parseResp(request);
