@@ -1,4 +1,4 @@
-<form id="pagerForm" method="post" action="demo_page1.html">
+<form id="pagerForm" method="post" action="back_contact.html">
 	<input type="hidden" name="status" value="${param.status}">
 	<input type="hidden" name="keywords" value="${param.keywords}" />
 	<input type="hidden" name="pageNum" value="1" />
@@ -8,7 +8,7 @@
 
 
 <div class="pageHeader">
-	<form onsubmit="return navTabSearch(this);" action="demo_page1.html" method="post" onreset="$(this).find('select.combox').comboxReset()">
+	<form onsubmit="return navTabSearch(this);" action="back_contact.html" method="post" onreset="$(this).find('select.combox').comboxReset()">
 	<div class="searchBar">
 		<!--<ul class="searchContent">
 			<li>
@@ -30,11 +30,11 @@
 		<table class="searchContent">
 			<tr>
 				<td>
-					关键字：<input type="text" name="keyword" />
+					姓名：<input type="text" name="keyword" />
 				</td>
-				<td>
-					电话：<input type="text" name="telNumber" />
-				</td>
+<!--				<td>-->
+<!--					电话：<input type="text" name="telNumber" />-->
+<!--				</td>-->
 <!--				<td>-->
 <!--					<select class="combox" name="province" ref="demo_combox_city" refUrl="demo/combox/city_{value}.html" reset-value="bj">-->
 <!--						<option value="all">所有省市</option>-->
@@ -57,12 +57,12 @@
 <!--						<option value="3" selected>3级</option>-->
 <!--					</select>-->
 <!--				</td>-->
-				<td class="dateRange">
-					时间选择:
-					<input name="startDate" class="date readonly" readonly="readonly" type="text" value="">
-					<span class="limit">-</span>
-					<input name="endDate" class="date readonly" readonly="readonly" type="text" value="">
-				</td>
+<!--				<td class="dateRange">-->
+<!--					时间选择:-->
+<!--					<input name="startDate" class="date readonly" readonly="readonly" type="text" value="">-->
+<!--					<span class="limit">-</span>-->
+<!--					<input name="endDate" class="date readonly" readonly="readonly" type="text" value="">-->
+<!--				</td>-->
 			</tr>
 		</table>
 		<div class="subBar">
