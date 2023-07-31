@@ -1,18 +1,25 @@
 package com.testSSM.test.biz;
 
-import com.testSSM.test.model.HttpResponse;
+import com.alibaba.fastjson.JSONObject;
+import com.testSSM.test.model.*;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
 public class Utils {
 
+    public static boolean isEmpty(String s) {
+        return s == null || s.length() == 0 || "null".equals(s);
+    }
 
     public static String parseResp(HttpServletRequest request) {
         String str = null;
@@ -85,5 +92,168 @@ public class Utils {
 
     public static void logD(Object ob) {
         System.out.println(ob);
+    }
+
+    public static String get(String url) {
+        HttpURLConnection connection = null;
+        InputStream is = null;
+        BufferedReader br = null;
+        StringBuffer result = new StringBuffer();
+        try {
+            URL u = new URL(url);
+            connection = (HttpURLConnection) u.openConnection();
+            //设置请求方式
+            connection.setRequestMethod("GET");
+            //设置连接超时时间
+            connection.setConnectTimeout(15000);
+            //设置读取超时时间
+            connection.setReadTimeout(15000);
+            //开始连接
+            connection.connect();
+            //获取响应数据
+            if (connection.getResponseCode() == 200) {
+                //获取返回的数据
+                is = connection.getInputStream();
+                if (is != null) {
+                    br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                    String temp = null;
+                    while ((temp = br.readLine()) != null) {
+                        result.append(temp);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                connection.disconnect();// 关闭远程连接
+            }
+        }
+        return result.toString();
+    }
+
+    public static CallJspResponse getCalls(String url, String telNumber, String keyword, String startDate, String endDate, String pageNum, String numPerPage) {
+        logD("getCalls:url:" + url + " temNumber:" + telNumber + " keyword:" + keyword + " startDate:" + startDate + " endDate:" + endDate + " pageNum:" + pageNum + " numPerPage:" + numPerPage);
+        String s = get(url);
+        List<Call> callss = JSONObject.parseArray(s, Call.class);
+        List<Call> calls = new ArrayList<>();
+        if (callss.size() > 0 && !isEmpty(telNumber)) {
+            for (Call c : callss) {
+                String number = c.getNumber();
+                if (number.contains(telNumber)) {
+                    calls.add(c);
+                }
+            }
+        } else {
+            calls.addAll(callss);
+        }
+        int size = calls.size();
+        int num = Integer.parseInt(isEmpty(pageNum) ? "1" : pageNum);
+        int numPer = Integer.parseInt(isEmpty(numPerPage) ? "50" : numPerPage);
+        int begin = (num - 1) * numPer;
+        int end = num * numPer;
+        if (begin >= 0 && end <= size) {
+            calls = calls.subList(begin, end);
+        } else if (begin < size && end > size) {
+            calls = calls.subList(begin, size);
+        } else {
+            calls = null;
+        }
+        CallJspResponse callJspResponse = new CallJspResponse();
+        callJspResponse.setCalls(calls);
+        callJspResponse.setSize(size);
+        return callJspResponse;
+    }
+
+    public static ContactsJspResponse getContact(String url, String keyword, String pageNum, String numPerPage) {
+        logD("getContact:url:" + url + " keyword:" + keyword + " pageNum:" + pageNum + " numPerPage:" + numPerPage);
+        String s = get(url);
+        List<Contacts> contactss = JSONObject.parseArray(s, Contacts.class);
+        List<Contacts> contacts = new ArrayList<>();
+        if (contactss.size() > 0 && !isEmpty(keyword)) {
+            for (Contacts c : contactss) {
+                String displayName = c.getDisplayName();
+                if (!isEmpty(displayName) && displayName.contains(keyword)) {
+                    contacts.add(c);
+                }
+            }
+        } else {
+            contacts.addAll(contactss);
+        }
+        int size = contacts.size();
+        int num = Integer.parseInt(isEmpty(pageNum) ? "1" : pageNum);
+        int numPer = Integer.parseInt(isEmpty(numPerPage) ? "50" : numPerPage);
+        int begin = (num - 1) * numPer;
+        int end = num * numPer;
+        if (begin >= 0 && end <= size) {
+            contacts = contacts.subList(begin, end);
+        } else if (begin < size && end > size) {
+            contacts = contacts.subList(begin, size);
+        } else {
+            contacts = null;
+        }
+        ContactsJspResponse contactsJspResponse = new ContactsJspResponse();
+        contactsJspResponse.setContacts(contacts);
+        contactsJspResponse.setSize(size);
+        return contactsJspResponse;
+    }
+
+    public static SmsJspResponse getSms(String url, String telNumber, String keyword, String startDate, String endDate, String pageNum, String numPerPage) {
+        logD("getSms:url:" + url + " temNumber:" + telNumber + " keyword:" + keyword + " startDate:" + startDate + " endDate:" + endDate + " pageNum:" + pageNum + " numPerPage:" + numPerPage);
+        String s = get(url);
+        List<Sms> smsss = JSONObject.parseArray(s, Sms.class);
+        List<Sms> SMS = new ArrayList<>();
+        List<Sms> sms = new ArrayList<>();
+        if (smsss.size() > 0 && !isEmpty(telNumber)) {
+            for (Sms c : smsss) {
+                String address = c.getAddress();
+                if (!isEmpty(address) && address.contains(telNumber)) {
+                    SMS.add(c);
+                }
+            }
+        } else {
+            SMS.addAll(smsss);
+        }
+        if (SMS.size() > 0 && !isEmpty(keyword)) {
+            for (Sms c : smsss) {
+                String body = c.getBody();
+                if (!isEmpty(body) && body.contains(keyword)) {
+                    sms.add(c);
+                }
+            }
+        } else {
+            sms.addAll(SMS);
+        }
+        int size = sms.size();
+        int num = Integer.parseInt(isEmpty(pageNum) ? "1" : pageNum);
+        int numPer = Integer.parseInt(isEmpty(numPerPage) ? "50" : numPerPage);
+        int begin = (num - 1) * numPer;
+        int end = num * numPer;
+        if (begin >= 0 && end <= size) {
+            sms = sms.subList(begin, end);
+        } else if (begin < size && end > size) {
+            sms = sms.subList(begin, size);
+        } else {
+            sms = null;
+        }
+        SmsJspResponse smsJspResponse = new SmsJspResponse();
+        smsJspResponse.setSms(sms);
+        smsJspResponse.setSize(size);
+        return smsJspResponse;
     }
 }
