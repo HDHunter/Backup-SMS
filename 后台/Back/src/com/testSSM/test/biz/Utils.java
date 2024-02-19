@@ -150,32 +150,42 @@ public class Utils {
     public static CallJspResponse getCalls(String url, String telNumber, String keyword, String startDate, String endDate, String pageNum, String numPerPage) {
         logD("getCalls:url:" + url + " temNumber:" + telNumber + " keyword:" + keyword + " startDate:" + startDate + " endDate:" + endDate + " pageNum:" + pageNum + " numPerPage:" + numPerPage);
         String s = get(url);
-        List<Call> callss = JSONObject.parseArray(s, Call.class);
-        List<Call> calls = new ArrayList<>();
-        if (callss.size() > 0 && !isEmpty(telNumber)) {
-            for (Call c : callss) {
-                String number = c.getNumber();
-                if (number.contains(telNumber)) {
-                    calls.add(c);
+        List<Call> callAll = JSONObject.parseArray(s, Call.class);
+        List<Call> calls1 = new ArrayList<>();
+        List<Call> callResult = new ArrayList<>();
+        if (callAll.size() > 0 && !isEmpty(startDate) && !isEmpty(endDate)) {
+            for (Call c : callAll) {
+                if (isRightInTime(c.getDate(), startDate, endDate)) {
+                    calls1.add(c);
                 }
             }
         } else {
-            calls.addAll(callss);
+            calls1.addAll(callAll);
         }
-        int size = calls.size();
+        if (calls1.size() > 0 && !isEmpty(telNumber)) {
+            for (Call c : calls1) {
+                String number = c.getNumber();
+                if (number.contains(telNumber)) {
+                    callResult.add(c);
+                }
+            }
+        } else {
+            callResult.addAll(calls1);
+        }
+        int size = callResult.size();
         int num = Integer.parseInt(isEmpty(pageNum) ? "1" : pageNum);
         int numPer = Integer.parseInt(isEmpty(numPerPage) ? "50" : numPerPage);
         int begin = (num - 1) * numPer;
         int end = num * numPer;
         if (begin >= 0 && end <= size) {
-            calls = calls.subList(begin, end);
+            callResult = callResult.subList(begin, end);
         } else if (begin < size && end > size) {
-            calls = calls.subList(begin, size);
+            callResult = callResult.subList(begin, size);
         } else {
-            calls = null;
+            callResult = null;
         }
         CallJspResponse callJspResponse = new CallJspResponse();
-        callJspResponse.setCalls(calls);
+        callJspResponse.setCalls(callResult);
         callJspResponse.setSize(size);
         return callJspResponse;
     }
@@ -216,44 +226,115 @@ public class Utils {
     public static SmsJspResponse getSms(String url, String telNumber, String keyword, String startDate, String endDate, String pageNum, String numPerPage) {
         logD("getSms:url:" + url + " temNumber:" + telNumber + " keyword:" + keyword + " startDate:" + startDate + " endDate:" + endDate + " pageNum:" + pageNum + " numPerPage:" + numPerPage);
         String s = get(url);
-        List<Sms> smsss = JSONObject.parseArray(s, Sms.class);
-        List<Sms> SMS = new ArrayList<>();
-        List<Sms> sms = new ArrayList<>();
-        if (smsss.size() > 0 && !isEmpty(telNumber)) {
-            for (Sms c : smsss) {
+        List<Sms> smsAll = JSONObject.parseArray(s, Sms.class);
+        List<Sms> sms1 = new ArrayList<>();
+        List<Sms> sms2 = new ArrayList<>();
+        List<Sms> smsResult = new ArrayList<>();
+        if (smsAll.size() > 0 && !isEmpty(telNumber)) {
+            for (Sms c : smsAll) {
                 String address = c.getAddress();
                 if (!isEmpty(address) && address.contains(telNumber)) {
-                    SMS.add(c);
+                    sms1.add(c);
                 }
             }
         } else {
-            SMS.addAll(smsss);
+            sms1.addAll(smsAll);
         }
-        if (SMS.size() > 0 && !isEmpty(keyword)) {
-            for (Sms c : smsss) {
+        if (sms1.size() > 0 && !isEmpty(startDate) && !isEmpty(endDate)) {
+            for (Sms c : sms1) {
+                if (isRightInTime(c.getDate(), startDate, endDate)) {
+                    sms2.add(c);
+                }
+            }
+        } else {
+            sms2.addAll(sms1);
+        }
+        if (sms2.size() > 0 && !isEmpty(keyword)) {
+            for (Sms c : sms2) {
                 String body = c.getBody();
                 if (!isEmpty(body) && body.contains(keyword)) {
-                    sms.add(c);
+                    smsResult.add(c);
                 }
             }
         } else {
-            sms.addAll(SMS);
+            smsResult.addAll(sms2);
         }
-        int size = sms.size();
+        int size = smsResult.size();
         int num = Integer.parseInt(isEmpty(pageNum) ? "1" : pageNum);
         int numPer = Integer.parseInt(isEmpty(numPerPage) ? "50" : numPerPage);
         int begin = (num - 1) * numPer;
         int end = num * numPer;
         if (begin >= 0 && end <= size) {
-            sms = sms.subList(begin, end);
+            smsResult = smsResult.subList(begin, end);
         } else if (begin < size && end > size) {
-            sms = sms.subList(begin, size);
+            smsResult = smsResult.subList(begin, size);
         } else {
-            sms = null;
+            smsResult = null;
         }
         SmsJspResponse smsJspResponse = new SmsJspResponse();
-        smsJspResponse.setSms(sms);
+        smsJspResponse.setSms(smsResult);
         smsJspResponse.setSize(size);
         return smsJspResponse;
+    }
+
+    private static boolean isRightInTime(String date, String startDate, String endDate) {
+        if (date.length() < 10 || startDate.length() < 10 || endDate.length() < 10) {
+            return false;
+        }
+        String year = date.substring(0, 4);
+        String month = date.substring(5, 7);
+        String day = date.substring(8, 10);
+        String year1 = startDate.substring(0, 4);
+        String month1 = startDate.substring(5, 7);
+        String day1 = startDate.substring(8, 10);
+        String year2 = endDate.substring(0, 4);
+        String month2 = endDate.substring(5, 7);
+        String day2 = endDate.substring(8, 10);
+        try {
+            if (year1.hashCode() < year.hashCode()) {
+                if (year2.hashCode() > year.hashCode()) {
+                    return true;
+                } else if (year2.hashCode() == year.hashCode()){
+                    if (month2.hashCode() > month.hashCode()) {
+                        return true;
+                    } else if (month2.hashCode() == month.hashCode()){
+                        if (day2.hashCode() >= day.hashCode()) {
+                            return true;
+                        }
+                    }
+                }
+            } else if (year1.hashCode() == year.hashCode()) {
+                if (month1.hashCode() < month.hashCode()) {
+                    if (year2.hashCode() > year.hashCode()) {
+                        return true;
+                    } else if (year2.hashCode() == year.hashCode()){
+                        if (month2.hashCode() > month.hashCode()) {
+                            return true;
+                        } else if (month2.hashCode() == month.hashCode()){
+                            if (day2.hashCode() >= day.hashCode()) {
+                                return true;
+                            }
+                        }
+                    }
+                } else if (month1.hashCode() == month.hashCode()) {
+                    if (day1.hashCode() <= day.hashCode()) {
+                        if (year2.hashCode() > year.hashCode()) {
+                            return true;
+                        } else if (year2.hashCode() == year.hashCode()){
+                            if (month2.hashCode() > month.hashCode()) {
+                                return true;
+                            } else if (month2.hashCode() == month.hashCode()){
+                                if (day2.hashCode() >= day.hashCode()) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
