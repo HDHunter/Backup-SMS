@@ -9,7 +9,7 @@ import android.widget.Toast;
  */
 public class Http {
 
-    private static final String baseUrl = "http://192.168.2.139:8080/Back";
+    private static final String baseUrl = "http://192.168.68.249:8080/Back";
     private Context context;
 
     public Http(Context context) {
