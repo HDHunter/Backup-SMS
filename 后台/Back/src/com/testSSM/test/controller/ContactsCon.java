@@ -89,17 +89,28 @@ public class ContactsCon {
                 contacts.setRelationName(map2.get("relationName"));
                 try {
                     if (contactsSer.add(contacts) != 1) {
-                        Utils.logE("存储报错");
+                        Utils.logE("存储报错1");
                         return Utils.response(-1, "数据库插入失败");
                     }
                     index += 1;
                     success.add(contacts);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return Utils.response(-1, "数据库操作失败");
+                    try {
+                        if (contactsSer.update(contacts) != 1) {
+                            Utils.logE("存储报错2");
+                            return Utils.response(-1, "数据库更新失败");
+                        }
+                        index += 1;
+                        success.add(contacts);
+                    } catch (Exception ee) {
+                        ee.printStackTrace();
+                        Utils.logE("存储异常：" + contacts);
+//                    return Utils.response(-1, "数据库操作失败");
+                    }
                 }
             }
-            Utils.logD("contacts 插入成功条数:" + success.size());
+            Utils.logD("contacts 操作成功条数:" + success.size());
         } catch (Exception e) {
             e.printStackTrace();
             return Utils.response(-1, "请求体解析异常");

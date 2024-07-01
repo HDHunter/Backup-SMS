@@ -39,4 +39,10 @@
         select * from contact;
     </select>
 
+    <update id="update" parameterType="com.testSSM.test.model.Contacts">
+        UPDATE contact
+        SET displayName = #{displayName}, photoUri = #{photoUri}, displayName = #{displayName}, numberType = #{numberType}, label = #{label}, number = #{number}, number1 = #{number1}, number2 = #{number2}, firstName = #{firstName}, company = #{company}, department = #{department}, job = #{job}, jobDescription = #{jobDescription}, emailAddress = #{emailAddress}, emailAddressDisplayName = #{emailAddressDisplayName}, note = #{note}, webUrl = #{webUrl}, nickName = #{nickName}, relationName = #{relationName}, protocol = #{protocol}, customProtocol = #{customProtocol}, identity = #{identity}, namespace = #{namespace}, groupId = #{groupId}
+        WHERE contactId = #{contactId};
+    </update>
+
 </mapper>

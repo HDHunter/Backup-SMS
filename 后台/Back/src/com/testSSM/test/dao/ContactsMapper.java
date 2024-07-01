@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ContactsMapper {
     int add(Contacts contacts);
+    int update(Contacts contacts);
 
     List<Contacts> get();
 }
