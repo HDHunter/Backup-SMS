@@ -82,13 +82,13 @@ public class SmsCon {
                 try {
                     if (smsSer.add(smS) != 1) {
                         Utils.logE("存储报错");
-                        return Utils.response(-1, "数据库插入失败");
+//                        return Utils.response(-1, "数据库插入失败");
                     }
                     index += 1;
                     success.add(smS);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return Utils.response(-1, "数据库操作失败");
+//                    return Utils.response(-1, "数据库操作失败");
                 }
             }
             Utils.logD("sms 插入成功条数:" + success.size());
